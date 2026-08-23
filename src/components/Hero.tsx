@@ -1,0 +1,130 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ChevronDown, Phone, MessageCircle, ShieldCheck, Clock, PlaneTakeoff } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { buildTelLink, buildWhatsAppLink, SITE_CONFIG } from "@/lib/config";
+
+export default function Hero() {
+  const { t } = useLanguage();
+
+  const scrollTo = (href: string) =>
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+
+  const trustMarkers = [
+    { icon: ShieldCheck, label: t.hero.trust1 },
+    { icon: Clock, label: t.hero.trust2 },
+    { icon: PlaneTakeoff, label: t.hero.trust3 },
+  ];
+
+  return (
+    <section
+      id="home"
+      className="relative flex min-h-screen items-center overflow-hidden bg-obsidian pt-20"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-mesh-gold" />
+      <div className="pointer-events-none absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-gold/10 blur-[120px]" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]" />
+
+      <div className="section-container relative py-24">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-gold"
+        >
+          {t.hero.eyebrow}
+        </motion.p>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="max-w-4xl font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
+        >
+          {t.hero.headline}
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="mt-6 max-w-2xl text-balance text-lg text-slate-body"
+        >
+          {t.hero.subheadline}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="mt-10 flex flex-wrap gap-4"
+        >
+          <button
+            onClick={() => scrollTo("#booking")}
+            className="rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105"
+          >
+            {t.hero.ctaPrimary}
+          </button>
+          <button
+            onClick={() => scrollTo("#fleet")}
+            className="rounded-full border border-border px-8 py-4 text-sm font-semibold text-white transition-colors duration-200 hover:border-gold/50 hover:text-gold"
+          >
+            {t.hero.ctaSecondary}
+          </button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="mt-8 flex flex-wrap gap-3"
+        >
+          <a
+            href={buildTelLink()}
+            className="flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:border-gold/50"
+          >
+            <Phone className="h-4 w-4 text-gold" />
+            {SITE_CONFIG.phoneDisplay}
+          </a>
+          <a
+            href={buildWhatsAppLink(
+              "Hello, I would like to request an executive transfer."
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:border-gold/50"
+          >
+            <MessageCircle className="h-4 w-4 text-gold" />
+            {t.common.whatsapp}
+          </a>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="mt-14 grid grid-cols-1 gap-4 border-t border-border pt-8 sm:grid-cols-3"
+        >
+          {trustMarkers.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
+                <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />
+              </div>
+              <span className="text-sm font-medium text-white">{label}</span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      <motion.div
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-xs text-slate-body"
+      >
+        <span className="uppercase tracking-[0.2em]">{t.hero.scrollHint}</span>
+        <ChevronDown className="h-4 w-4 text-gold" />
+      </motion.div>
+    </section>
+  );
+}
