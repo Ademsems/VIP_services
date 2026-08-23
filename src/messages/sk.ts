@@ -51,45 +51,43 @@ const sk: Messages = {
     ],
   },
   fleet: {
-    title: "Vozový park",
+    title: "Prémiové Vozidlo & Komfort",
     subtitle:
-      "Starostlivo vybraná flotila vozidiel Mercedes-Benz, udržiavaná podľa najvyšších štandardov pre firemné cestovanie.",
-    vehicles: [
+      "Jedno starostlivo udržiavané vozidlo triedy Executive Black Edition — konzistentné, diskrétne a vybavené podľa najvyšších štandardov pri každom transfere.",
+    vehicleName: "Mercedes-Benz S-Class",
+    vehicleClass: "Executive Black Edition",
+    passengers: "3 cestujúci",
+    luggage: "3-4 veľké kufre",
+    amenities: [
       {
-        name: "Mercedes-Benz S-Class",
-        class: "Exkluzívny sedan",
-        passengers: "3 cestujúci",
-        luggage: "2 veľké kufre",
-        features: [
-          "Kožený interiér",
-          "Wi-Fi na palube",
-          "Tónované sklá",
-          "Klimatizačné zóny",
-        ],
+        title: "Štandard Executive Black Edition",
+        description:
+          "Sedanová a limuzínová špecifikácia, pripravená a udržiavaná podľa exkluzívneho štandardu pri každej jazde.",
       },
       {
-        name: "Mercedes-Benz E-Class",
-        class: "Business sedan",
-        passengers: "3 cestujúci",
-        luggage: "2 veľké kufre",
-        features: [
-          "Prémiové kožené sedadlá",
-          "Wi-Fi na palube",
-          "Tónované sklá súkromia",
-          "Voda a doplnky",
-        ],
+        title: "Kožený interiér a tichá kabína",
+        description:
+          "Kvalitná koža v kombinácii so zvukovou izoláciou pre pokojnú jazdu bez rušivých vplyvov.",
       },
       {
-        name: "Mercedes-Benz V-Class",
-        class: "Exkluzívny van",
-        passengers: "6 cestujúcich",
-        luggage: "6 veľkých kufrov",
-        features: [
-          "Konferenčné usporiadanie sedadiel",
-          "Wi-Fi na palube",
-          "Zvýšený priestor na nohy",
-          "Ideálne pre skupiny a tímy",
-        ],
+        title: "Rýchle Wi-Fi a nabíjanie",
+        description:
+          "Zostaňte pripojení počas jazdy vďaka vysokorýchlostnému Wi-Fi a nabíjaniu na každom sedadle.",
+      },
+      {
+        title: "Dostatočný priestor na batožinu",
+        description:
+          "Priestor pre 3-4 veľké kufre, ideálny pre pracovné cesty a letiskové transfery.",
+      },
+      {
+        title: "Tónované sklá a klimatizačné zóny",
+        description:
+          "Tónované sklá súkromia a individuálne klimatizačné zóny zaisťujú komfort a diskrétnosť.",
+      },
+      {
+        title: "Chladená voda v cene",
+        description:
+          "Chladená voda je pripravená pri každej jazde, spolu s ďalšími drobnými doplnkami na požiadanie.",
       },
     ],
   },

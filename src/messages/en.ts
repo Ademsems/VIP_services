@@ -51,45 +51,43 @@ const en: Messages = {
     ],
   },
   fleet: {
-    title: "The Fleet",
+    title: "Executive Vehicle & Onboard Experience",
     subtitle:
-      "A curated selection of Mercedes-Benz vehicles, maintained to the highest standard for executive travel.",
-    vehicles: [
+      "A single, meticulously maintained Executive Black Edition vehicle — consistent, discreet, and appointed to the highest standard for every transfer.",
+    vehicleName: "Mercedes-Benz S-Class",
+    vehicleClass: "Executive Black Edition",
+    passengers: "3 Passengers",
+    luggage: "3-4 Executive Suitcases",
+    amenities: [
       {
-        name: "Mercedes-Benz S-Class",
-        class: "Executive Sedan",
-        passengers: "3 Passengers",
-        luggage: "2 Large Suitcases",
-        features: [
-          "Full leather interior",
-          "Onboard Wi-Fi",
-          "Privacy glass",
-          "Climate zones",
-        ],
+        title: "Executive Black Edition Standard",
+        description:
+          "Sedan and limousine specification, presented and detailed to executive standard for every departure.",
       },
       {
-        name: "Mercedes-Benz E-Class",
-        class: "Business Sedan",
-        passengers: "3 Passengers",
-        luggage: "2 Large Suitcases",
-        features: [
-          "Premium leather seating",
-          "Onboard Wi-Fi",
-          "Tinted privacy glass",
-          "Bottled water & amenities",
-        ],
+        title: "Leather Interior & Quiet Cabin",
+        description:
+          "High-grade leather upholstery paired with acoustic insulation for a calm, distraction-free ride.",
       },
       {
-        name: "Mercedes-Benz V-Class",
-        class: "Executive Van",
-        passengers: "6 Passengers",
-        luggage: "6 Large Suitcases",
-        features: [
-          "Conference seating",
-          "Onboard Wi-Fi",
-          "Extended legroom",
-          "Ideal for groups & teams",
-        ],
+        title: "High-Speed Wi-Fi & Charging",
+        description:
+          "Stay connected en route with onboard high-speed Wi-Fi and device charging at every seat.",
+      },
+      {
+        title: "Ample Luggage Capacity",
+        description:
+          "Room for 3-4 executive suitcases, comfortably accommodating business travel and airport transfers.",
+      },
+      {
+        title: "Privacy Glass & Climate Zones",
+        description:
+          "Tinted privacy glass and individual climate zones keep every passenger comfortable and unseen.",
+      },
+      {
+        title: "Complimentary Chilled Water",
+        description:
+          "Bottled water is chilled and ready on every journey, along with other small courtesies on request.",
       },
     ],
   },

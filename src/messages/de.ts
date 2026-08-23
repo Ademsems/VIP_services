@@ -51,45 +51,43 @@ const de: Messages = {
     ],
   },
   fleet: {
-    title: "Die Flotte",
+    title: "Premium Fahrzeug & Komfort",
     subtitle:
-      "Eine ausgewählte Reihe von Mercedes-Benz Fahrzeugen, gepflegt nach höchsten Standards für Geschäftsreisen.",
-    vehicles: [
+      "Ein einzelnes, sorgfältig gepflegtes Fahrzeug der Executive Black Edition — konsistent, diskret und nach höchstem Standard für jeden Transfer ausgestattet.",
+    vehicleName: "Mercedes-Benz S-Klasse",
+    vehicleClass: "Executive Black Edition",
+    passengers: "3 Passagiere",
+    luggage: "3-4 große Koffer",
+    amenities: [
       {
-        name: "Mercedes-Benz S-Klasse",
-        class: "Executive Limousine",
-        passengers: "3 Passagiere",
-        luggage: "2 große Koffer",
-        features: [
-          "Vollleder-Innenraum",
-          "WLAN an Bord",
-          "Sichtschutzverglasung",
-          "Klimazonen",
-        ],
+        title: "Executive Black Edition Standard",
+        description:
+          "Limousinen-Ausstattung, für jede Fahrt nach höchstem Standard präsentiert und aufbereitet.",
       },
       {
-        name: "Mercedes-Benz E-Klasse",
-        class: "Business Limousine",
-        passengers: "3 Passagiere",
-        luggage: "2 große Koffer",
-        features: [
-          "Premium-Ledersitze",
-          "WLAN an Bord",
-          "Getönte Sichtschutzverglasung",
-          "Wasser & Annehmlichkeiten",
-        ],
+        title: "Lederinterieur & ruhige Kabine",
+        description:
+          "Hochwertiges Leder kombiniert mit Schalldämmung für eine ruhige, ablenkungsfreie Fahrt.",
       },
       {
-        name: "Mercedes-Benz V-Klasse",
-        class: "Executive Van",
-        passengers: "6 Passagiere",
-        luggage: "6 große Koffer",
-        features: [
-          "Konferenzbestuhlung",
-          "WLAN an Bord",
-          "Erweiterte Beinfreiheit",
-          "Ideal für Gruppen & Teams",
-        ],
+        title: "Highspeed-WLAN & Ladefunktion",
+        description:
+          "Bleiben Sie unterwegs vernetzt mit Highspeed-WLAN an Bord und Ladefunktion an jedem Sitzplatz.",
+      },
+      {
+        title: "Großzügiger Gepäckraum",
+        description:
+          "Platz für 3-4 große Koffer — komfortabel für Geschäftsreisen und Flughafentransfers.",
+      },
+      {
+        title: "Sichtschutzverglasung & Klimazonen",
+        description:
+          "Getönte Sichtschutzverglasung und individuelle Klimazonen sorgen für Komfort und Diskretion.",
+      },
+      {
+        title: "Gekühltes Wasser inklusive",
+        description:
+          "Gekühltes Wasser steht auf jeder Fahrt bereit, ergänzt durch weitere kleine Annehmlichkeiten auf Anfrage.",
       },
     ],
   },

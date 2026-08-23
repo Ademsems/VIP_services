@@ -44,12 +44,13 @@ export interface Messages {
   fleet: {
     title: string;
     subtitle: string;
-    vehicles: {
-      name: string;
-      class: string;
-      passengers: string;
-      luggage: string;
-      features: string[];
+    vehicleName: string;
+    vehicleClass: string;
+    passengers: string;
+    luggage: string;
+    amenities: {
+      title: string;
+      description: string;
     }[];
   };
   routes: {

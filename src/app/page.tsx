@@ -5,6 +5,7 @@ import Fleet from "@/components/Fleet";
 import Routes from "@/components/Routes";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <About />
       <BookingForm />
       <Footer />
+      <FloatingWhatsApp />
     </main>
   );
 }

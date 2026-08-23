@@ -25,13 +25,15 @@ src/
 │   ├── Navbar.tsx              Floating blur header, smooth-scroll nav, language switcher,
 │   │                          gold "Book Transfer" CTA, mobile drawer
 │   ├── Hero.tsx                 #home — headline, trust markers, dual CTA, phone/WhatsApp chips
-│   ├── Fleet.tsx                 #fleet — S/E/V-Class cards with hover reveal
+│   ├── Fleet.tsx                 #fleet — single-vehicle showcase: image/spec card + a
+│   │                          6-item onboard-amenities grid with hover reveal
 │   ├── Routes.tsx                #routes — fixed-rate corridor cards
 │   ├── About.tsx                  #about — 4 trust pillars (discretion, punctuality,
 │   │                          flight monitoring, meet & greet)
 │   ├── BookingForm.tsx             #booking — corridor selector → date/time → passengers/
 │   │                          luggage → contact → 1-tap WhatsApp dispatch link
 │   ├── Footer.tsx                   #footer — company info, quick links, contact, legal notice
+│   ├── FloatingWhatsApp.tsx          Fixed bottom-right pulsing WhatsApp quick-dispatch button
 │   ├── LuxuryImagePlaceholder.tsx    Reusable image + CSS/SVG fallback (see below)
 │   └── RevealSection.tsx             Shared scroll-entrance wrapper (framer-motion)
 ├── context/
@@ -44,7 +46,7 @@ src/
 │                              source of truth; every locale file must satisfy it)
 └── lib/
     └── config.ts                Company contact details + `buildWhatsAppLink()` /
-                                 `buildTelLink()` helpers
+                                 `buildTelLink()` / `DIRECT_WHATSAPP_LINK`
 ```
 
 Every section is a self-contained component pulling copy from `useLanguage().t`; `page.tsx`
@@ -101,6 +103,32 @@ loaded via `next/font/google` in `layout.tsx` and exposed as CSS vars
   `src/messages/<code>.ts` implementing `Messages`, register it in `dictionaries` in
   `LanguageContext.tsx`, and add it to `SUPPORTED_LOCALES` + `LOCALE_LABELS` (Navbar).
 
+## Contact Configuration
+
+All company contact details live in `src/lib/config.ts` (`SITE_CONFIG`), the single source
+of truth consumed by every touchpoint on the site:
+
+| Field | Value |
+|---|---|
+| `phoneDisplay` | `+421 911 444 469` |
+| `phoneE164` | `+421911444469` |
+| `whatsappNumber` | `421911444469` |
+
+- `buildTelLink()` returns `tel:+421911444469`, used by the Hero phone chip, Footer, and
+  anywhere a direct dial link is needed.
+- `buildWhatsAppLink(message)` URL-encodes an arbitrary message and returns a
+  `https://wa.me/421911444469?text=...` link — used by `BookingForm.tsx` to dispatch the
+  dynamically composed booking request (route, date, time, passengers, luggage, contact
+  details, notes).
+- `DIRECT_WHATSAPP_LINK` is a fixed pre-filled inquiry link
+  (`https://wa.me/421911444469?text=Hello%20VIP%20Service,...`) used by every *quick-contact*
+  touchpoint that isn't the booking form itself: the Navbar header WhatsApp icon, the Hero
+  WhatsApp chip, the Footer WhatsApp link, and `FloatingWhatsApp.tsx` (the fixed
+  bottom-right pulsing dispatch button rendered globally in `page.tsx`).
+
+To update contact details site-wide, edit only `SITE_CONFIG` and `DIRECT_WHATSAPP_LINK` in
+`src/lib/config.ts` — no component changes are needed.
+
 ## Image Fallback Strategy
 
 `LuxuryImagePlaceholder` (`src/components/LuxuryImagePlaceholder.tsx`) is the only way
@@ -132,7 +160,28 @@ Vienna, Budapest, Prague), contact details, and founder info from `src/lib/confi
 returns a `https://wa.me/<number>?text=...` link. `BookingForm.tsx` composes the full form
 state (route, date, time, passengers, luggage, name, phone, notes) into a formatted message
 and binds it to the submit CTA's `href` — no backend/API route required; submission is a
-plain outbound link opened in a new tab.
+plain outbound link opened in a new tab. The form is intentionally a single VIP standard
+booking flow — it has no vehicle-class selector, since the site offers one Executive
+vehicle rather than a fleet to choose from (see Vehicle Showcase below).
+
+## Vehicle Showcase (Single Executive Vehicle)
+
+`Fleet.tsx` (mounted at `#fleet`) presents one vehicle rather than a multi-car fleet grid:
+
+- **Copy source**: `t.fleet` in `src/types/messages.ts` — `vehicleName`, `vehicleClass`,
+  `passengers`, `luggage`, and an `amenities: { title, description }[]` array (6 entries)
+  covering Executive Black Edition standard, leather interior & quiet cabin, high-speed
+  Wi-Fi & charging, luggage capacity, privacy glass & climate zones, and complimentary
+  chilled water. Every locale (`en`/`de`/`sk`) implements this schema; the section title
+  translates to "Executive Vehicle & Onboard Experience" (EN), "Premium Fahrzeug & Komfort"
+  (DE), "Prémiové Vozidlo & Komfort" (SK).
+- **Layout**: a single `LuxuryImagePlaceholder` + spec card (name, class, passengers,
+  luggage) on the left, and a responsive 2-column grid of the 6 amenity cards on the right,
+  each with a Lucide icon (`Car`, `Armchair`, `Wifi`, `Briefcase`, `Snowflake`,
+  `GlassWater`), alternating scroll-reveal directions and `whileHover={{ y: -6 }}` lift.
+- To add a second vehicle in the future, `t.fleet` would need to change from a single
+  object back to an array (as in the original multi-vehicle draft) — this is a deliberate,
+  documented trade-off, not an oversight.
 
 ## Verification
 

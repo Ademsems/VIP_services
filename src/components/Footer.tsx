@@ -2,7 +2,7 @@
 
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { buildTelLink, buildWhatsAppLink, SITE_CONFIG } from "@/lib/config";
+import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -61,7 +61,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                href={buildWhatsAppLink("Hello, I would like to request an executive transfer.")}
+                href={DIRECT_WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 hover:text-gold"

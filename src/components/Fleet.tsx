@@ -1,10 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, Briefcase, Check, Car } from "lucide-react";
+import {
+  Users,
+  Briefcase,
+  Car,
+  Armchair,
+  Wifi,
+  Snowflake,
+  GlassWater,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LuxuryImagePlaceholder from "./LuxuryImagePlaceholder";
 import RevealSection from "./RevealSection";
+
+const AMENITY_ICONS = [Car, Armchair, Wifi, Briefcase, Snowflake, GlassWater];
 
 export default function Fleet() {
   const { t } = useLanguage();
@@ -22,61 +32,65 @@ export default function Fleet() {
           <p className="mt-4 text-slate-body">{t.fleet.subtitle}</p>
         </RevealSection>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {t.fleet.vehicles.map((vehicle, idx) => (
-            <RevealSection
-              key={vehicle.name}
-              direction={idx % 2 === 0 ? "left" : "right"}
-              delay={idx * 0.1}
-            >
-              <motion.div
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:border-gold/40 hover:shadow-gold-lg"
-              >
-                <LuxuryImagePlaceholder
-                  alt={vehicle.name}
-                  icon={Car}
-                  label={vehicle.class}
-                  className="aspect-[4/3] w-full"
-                />
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:items-start">
+          <RevealSection direction="left" className="lg:col-span-2">
+            <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-gold-lg">
+              <LuxuryImagePlaceholder
+                alt={t.fleet.vehicleName}
+                icon={Car}
+                label={t.fleet.vehicleClass}
+                className="aspect-[4/3] w-full"
+              />
+              <div className="p-6">
+                <h3 className="font-display text-xl font-semibold text-white">
+                  {t.fleet.vehicleName}
+                </h3>
+                <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gold">
+                  {t.fleet.vehicleClass}
+                </p>
 
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-semibold text-white">
-                    {vehicle.name}
-                  </h3>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gold">
-                    {vehicle.class}
-                  </p>
-
-                  <div className="mt-4 flex gap-4 text-sm text-slate-body">
-                    <span className="flex items-center gap-1.5">
-                      <Users className="h-4 w-4 text-gold" />
-                      {vehicle.passengers}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Briefcase className="h-4 w-4 text-gold" />
-                      {vehicle.luggage}
-                    </span>
-                  </div>
-
-                  <ul className="mt-5 space-y-2 border-t border-border pt-4">
-                    {vehicle.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center gap-2 text-sm text-slate-body transition-colors duration-200 group-hover:text-white"
-                      >
-                        <Check className="h-3.5 w-3.5 shrink-0 text-gold" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="mt-4 flex gap-4 border-t border-border pt-4 text-sm text-slate-body">
+                  <span className="flex items-center gap-1.5">
+                    <Users className="h-4 w-4 text-gold" />
+                    {t.fleet.passengers}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Briefcase className="h-4 w-4 text-gold" />
+                    {t.fleet.luggage}
+                  </span>
                 </div>
+              </div>
+            </div>
+          </RevealSection>
 
-                <div className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 ring-1 ring-gold/30 transition-opacity duration-300 group-hover:opacity-100" />
-              </motion.div>
-            </RevealSection>
-          ))}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-3">
+            {t.fleet.amenities.map((amenity, idx) => {
+              const Icon = AMENITY_ICONS[idx % AMENITY_ICONS.length];
+              return (
+                <RevealSection
+                  key={amenity.title}
+                  direction="right"
+                  delay={idx * 0.08}
+                >
+                  <motion.div
+                    whileHover={{ y: -6 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="h-full rounded-2xl border border-border bg-surface p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
+                  >
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
+                      <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />
+                    </div>
+                    <h4 className="mt-4 font-display text-base font-semibold text-white">
+                      {amenity.title}
+                    </h4>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-body">
+                      {amenity.description}
+                    </p>
+                  </motion.div>
+                </RevealSection>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

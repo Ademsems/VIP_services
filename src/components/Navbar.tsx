@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X, Globe, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { Locale } from "@/types/messages";
+import { DIRECT_WHATSAPP_LINK } from "@/lib/config";
 
 const LOCALE_LABELS: Record<Locale, string> = {
   en: "EN",
@@ -73,6 +74,16 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
+          <a
+            href={DIRECT_WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.common.whatsapp}
+            className="hidden items-center justify-center rounded-full border border-border p-2 text-slate-body transition-colors hover:border-gold/50 hover:text-gold sm:flex"
+          >
+            <MessageCircle className="h-4 w-4" />
+          </a>
+
           <div className="relative hidden sm:block">
             <button
               onClick={() => setLangOpen((v) => !v)}
