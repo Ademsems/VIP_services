@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Car, LucideIcon } from "lucide-react";
+import { IMAGE_EXTENSIONS, candidateSrc } from "@/lib/image";
 
 interface LuxuryImagePlaceholderProps {
-  src?: string;
+  /** Path without extension, e.g. "/images/fleet/vehicle-exterior" — any of
+   *  IMAGE_EXTENSIONS is tried in turn, so any format works under that name. */
+  srcBase?: string;
   alt: string;
   icon?: LucideIcon;
   label?: string;
@@ -14,20 +17,23 @@ interface LuxuryImagePlaceholderProps {
 }
 
 /**
- * Renders a Next.js <Image> when `src` is provided and loads successfully.
- * Falls back to a CSS/SVG gold-mesh skeleton on missing src or load failure,
- * guaranteeing `next build` never fails on external image availability.
+ * Renders a Next.js <Image> when `srcBase` is provided, trying each format in
+ * IMAGE_EXTENSIONS until one loads. Falls back to a CSS/SVG gold-mesh skeleton
+ * once every candidate fails (or `srcBase` is omitted), guaranteeing
+ * `next build` never fails on external image availability.
  */
 export default function LuxuryImagePlaceholder({
-  src,
+  srcBase,
   alt,
   icon: Icon = Car,
   label,
   className = "",
   priority = false,
 }: LuxuryImagePlaceholderProps) {
-  const [failed, setFailed] = useState(false);
-  const showImage = Boolean(src) && !failed;
+  const [extensionIndex, setExtensionIndex] = useState(0);
+  const exhausted = extensionIndex >= IMAGE_EXTENSIONS.length;
+  const showImage = Boolean(srcBase) && !exhausted;
+  const currentSrc = showImage ? candidateSrc(srcBase as string, extensionIndex) : undefined;
 
   return (
     <div
@@ -35,13 +41,14 @@ export default function LuxuryImagePlaceholder({
     >
       {showImage && (
         <Image
-          src={src as string}
+          key={currentSrc}
+          src={currentSrc as string}
           alt={alt}
           fill
           priority={priority}
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover"
-          onError={() => setFailed(true)}
+          onError={() => setExtensionIndex((i) => i + 1)}
         />
       )}
 

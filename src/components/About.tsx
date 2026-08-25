@@ -6,26 +6,30 @@ import { EyeOff, Timer, PlaneLanding, Handshake } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import RevealSection from "./RevealSection";
 import TiltCard from "./TiltCard";
+import { IMAGE_EXTENSIONS, candidateSrc } from "@/lib/image";
 
 const ICONS = [EyeOff, Timer, PlaneLanding, Handshake];
+const ABOUT_IMAGE_BASE = "/images/about/about-atmosphere";
 
 export default function About() {
   const { t } = useLanguage();
-  const [imageFailed, setImageFailed] = useState(false);
+  const [extensionIndex, setExtensionIndex] = useState(0);
+  const exhausted = extensionIndex >= IMAGE_EXTENSIONS.length;
 
   return (
     <section id="about" className="relative overflow-hidden bg-obsidian py-24">
-      {!imageFailed && (
+      {!exhausted && (
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <Image
-            src="/images/about/about-atmosphere.png"
+            key={extensionIndex}
+            src={candidateSrc(ABOUT_IMAGE_BASE, extensionIndex)}
             alt=""
             fill
             sizes="100vw"
-            className="object-cover opacity-25"
-            onError={() => setImageFailed(true)}
+            className="object-cover opacity-40"
+            onError={() => setExtensionIndex((i) => i + 1)}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-obsidian via-obsidian/85 to-obsidian" />
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian/95 via-obsidian/50 to-obsidian/95" />
         </div>
       )}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-gold/5 blur-[120px]" />

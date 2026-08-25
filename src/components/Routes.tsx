@@ -8,10 +8,10 @@ import LuxuryImagePlaceholder from "./LuxuryImagePlaceholder";
 
 /** Indexed to match t.routes.items order: Vienna Airport, Vienna City, Budapest, Prague. */
 const ROUTE_IMAGES = [
-  "/images/routes/route-vienna-airport.jpg",
-  "/images/routes/route-vienna-city.jpg",
-  "/images/routes/route-budapest.jpg",
-  "/images/routes/route-prague.jpg",
+  "/images/routes/route-vienna-airport",
+  "/images/routes/route-vienna-city",
+  "/images/routes/route-budapest",
+  "/images/routes/route-prague",
 ];
 
 export default function Routes() {
@@ -43,7 +43,7 @@ export default function Routes() {
               >
                 <div className="flex items-center gap-4">
                   <LuxuryImagePlaceholder
-                    src={ROUTE_IMAGES[idx]}
+                    srcBase={ROUTE_IMAGES[idx]}
                     alt={`${item.from} to ${item.to}`}
                     icon={MapPin}
                     className="h-16 w-16 shrink-0"

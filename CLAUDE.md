@@ -182,55 +182,69 @@ of truth consumed by every touchpoint on the site:
 To update contact details site-wide, edit only `SITE_CONFIG` and `DIRECT_WHATSAPP_LINK` in
 `src/lib/config.ts` — no component changes are needed.
 
+### Legal entity disclosure
+
+`src/lib/config.ts` also exports `LEGAL_ENTITY` — the statutory registration details
+required on Slovak commercial websites (company name, registered address, IČO, DIČ).
+Rendered in `Footer.tsx`'s legal column as a plain `<address>` block, always in the same
+raw form regardless of locale (`t.footer.licensed` above it is translated; the entity facts
+below it are not — a company registration number doesn't translate). Update only
+`LEGAL_ENTITY` in `config.ts` to change these details site-wide.
+
 ## Image Fallback Strategy
 
-Two components render images, and both follow the same contract: try a real photo, fall
-back to a CSS/SVG treatment on missing file or load failure — never a broken image icon,
-never a build failure.
+Two components render images, and both follow the same contract: try a real photo — in
+**any common format**, tried in turn — and fall back to a CSS/SVG treatment only once every
+format candidate fails. Never a broken image icon, never a build failure.
 
+- **`src/lib/image.ts`** is the shared piece: `IMAGE_EXTENSIONS = ["webp", "avif", "jpg",
+  "jpeg", "png"]` and `candidateSrc(base, index)`. Every image-rendering component takes a
+  `srcBase` prop — a path **without** an extension, e.g.
+  `/images/fleet/vehicle-exterior` — and cycles through `IMAGE_EXTENSIONS` on each
+  `onError`, remounting the `<Image>` (`key={currentSrc}`) so the browser retries against
+  the next candidate. Drop a file in as `.webp`, `.avif`, `.jpg`, `.jpeg`, or `.png` under
+  that same base name and it's picked up automatically — no code change, no need to know
+  in advance which format the asset will arrive in.
 - **`LuxuryImagePlaceholder`** (`src/components/LuxuryImagePlaceholder.tsx`): the general
-  card-image component. If `src` is passed, renders `next/image` with `fill` + `onError`.
-  If `src` is omitted, or the `<Image>` fires `onError`, it renders a `bg-mesh-gold`
-  gradient panel, an animated shimmer sweep (`animate-shimmer`, `motion-reduce:animate-none`
-  guarded), a centered Lucide icon in a gold-ringed circle, and an optional uppercase label.
-- **`HeroVisual`** (`src/components/HeroVisual.tsx`): the same try-photo-then-fall-back
-  contract, adapted for Hero's borderless, absolutely-positioned placement. Falls back to
-  the hand-drawn `CarSilhouette` SVG (not a generic icon) instead — the "cinematic
-  silhouette" *is* the fallback for the hero photo, not a separate concept.
-- **`About.tsx`**'s atmospheric backdrop is a one-off `next/image` + local `useState`
-  error handler (not worth its own component for a single full-bleed usage) — on failure
-  it simply doesn't render, leaving the existing `bg-gold/5 blur` glow as the backdrop.
+  card-image component. If `srcBase` is passed, renders `next/image` with `fill` + the
+  extension-cycling `onError` above. Once all candidates are exhausted (or `srcBase` is
+  omitted), it renders a `bg-mesh-gold` gradient panel, an animated shimmer sweep
+  (`animate-shimmer`, `motion-reduce:animate-none` guarded), a centered Lucide icon in a
+  gold-ringed circle, and an optional uppercase label.
+- **`HeroVisual`** (`src/components/HeroVisual.tsx`): the same contract, adapted for Hero's
+  borderless, absolutely-positioned placement. Falls back to the hand-drawn `CarSilhouette`
+  SVG (not a generic icon) instead — the "cinematic silhouette" *is* the fallback for the
+  hero photo, not a separate concept.
+- **`About.tsx`**'s atmospheric backdrop is a one-off `next/image` + local extension-cycling
+  `useState` (not worth its own component for a single full-bleed usage) — once exhausted it
+  simply doesn't render, leaving the existing `bg-gold/5 blur` glow as the backdrop.
 
-All `src` values point to **local `public/` files only** — no remote URLs, no
-`next.config.mjs` `images.remotePatterns` needed. Because every image reference in the code
-is a plain string path (not a build-time `import`), `next build` never depends on whether
-the file actually exists: a missing file 404s at *request* time and the `onError` handler
-engages, exactly like a broken remote URL would. This means the real-photography wiring
-below is live in the code right now, and the site renders its graceful fallbacks (SVG
-silhouette, icon placeholders, CSS glow) until the actual files are dropped into `public/`.
+All paths point to **local `public/` files only** — no remote URLs, no `next.config.mjs`
+`images.remotePatterns` needed. Because every reference is a plain string (not a build-time
+`import`), `next build` never depends on whether any candidate file actually exists: a
+missing file 404s at *request* time and the next candidate (or the CSS/SVG fallback) engages,
+exactly like a broken remote URL would.
 
 ### Real photography asset spec
 
-| File | Used by | Aspect | Dimensions | Actual format |
+| Base path (any of `.webp`/`.avif`/`.jpg`/`.jpeg`/`.png`) | Used by | Aspect | Suggested dimensions | Files currently in `public/` |
 |---|---|---|---|---|
-| `public/images/hero/hero-executive-mercedes.jpg` | `Hero.tsx` → `HeroVisual` | 900:320 (~2.8:1) | 1376 × 768 | JPEG |
-| `public/images/fleet/vehicle-exterior.jpg` | `Fleet.tsx` exterior card | 4:3 | 1600 × 1066 | JPEG |
-| `public/images/fleet/vehicle-interior.jpg` | `Fleet.tsx` interior card (carries `CabinHotspots`) | 4:3 | 1200 × 896 | JPEG |
-| `public/images/routes/route-vienna-airport.jpg` | `Routes.tsx` item 0 | 1:1 | 400 × 400 | JPEG |
-| `public/images/routes/route-vienna-city.jpg` | `Routes.tsx` item 1 | 1:1 | 400 × 400 | JPEG |
-| `public/images/routes/route-budapest.jpg` | `Routes.tsx` item 2 | 1:1 | 400 × 400 | JPEG |
-| `public/images/routes/route-prague.jpg` | `Routes.tsx` item 3 | 1:1 | 400 × 400 | JPEG |
-| `public/images/about/about-atmosphere.png` | `About.tsx` backdrop | 16:9 | 1920 × 1081 | PNG |
+| `public/images/hero/hero-executive-mercedes` | `Hero.tsx` → `HeroVisual` | 900:320 (~2.8:1) | ~2400 × 1350 | `.jpg` (1376 × 768) |
+| `public/images/fleet/vehicle-exterior` | `Fleet.tsx` exterior card | 4:3 | ~1600 × 1200 | `.jpg` (1600 × 1066) |
+| `public/images/fleet/vehicle-interior` | `Fleet.tsx` interior card (carries `CabinHotspots`) | 4:3 | ~1600 × 1200 | `.jpg` (1200 × 896) |
+| `public/images/routes/route-vienna-airport` | `Routes.tsx` item 0 | 1:1 | ~400 × 400 | `.jpg` (400 × 400) |
+| `public/images/routes/route-vienna-city` | `Routes.tsx` item 1 | 1:1 | ~400 × 400 | `.jpg` (400 × 400) |
+| `public/images/routes/route-budapest` | `Routes.tsx` item 2 | 1:1 | ~400 × 400 | `.jpg` (400 × 400) |
+| `public/images/routes/route-prague` | `Routes.tsx` item 3 | 1:1 | ~400 × 400 | `.jpg` (400 × 400) |
+| `public/images/about/about-atmosphere` | `About.tsx` backdrop | 16:9 | ~1920 × 1080 | `.png` (1920 × 1081) |
 
-**Format note**: the original spec called for `.webp` throughout; the files actually
-supplied are JPEG/PNG. Extensions were corrected to match real content (`file --mime-type`
-verified) rather than kept as `.webp` — a `.webp`-named file that's actually a JPEG serves
-an incorrect `Content-Type: image/webp` header when requested directly (bypassing the
-`next/image` optimizer, which transcodes and gets the header right regardless of source
-extension), which is a real defect: browsers, social-share link unfurlers, and any tooling
-that trusts the declared MIME type over sniffing content can fail to render it. If
-re-exporting these as true WebP later, only the extension + these six `src` strings need
-to change (`About.tsx`, `Fleet.tsx` ×2, `Hero.tsx`, `Routes.tsx`'s `ROUTE_IMAGES` array).
+**History**: the first upload had all 8 files named with a `.webp` extension while actually
+being JPEG/PNG content (verified via `file --mime-type`) — a real defect, since a
+mismatched extension serves an incorrect `Content-Type` header on the raw static path
+(bypassing the `next/image` optimizer, which transcodes correctly regardless of source
+extension). Rather than re-fix extensions by hand every time a new format gets uploaded,
+`srcBase` + `IMAGE_EXTENSIONS` cycling was introduced so **any** of the five formats works
+under the same base filename going forward.
 
 Route thumbnails are matched to `t.routes.items` **by array index**, not by parsing the
 localized city name (`ROUTE_IMAGES[idx]` in `Routes.tsx`) — the four corridors are the same
@@ -325,7 +339,13 @@ photography is used anywhere on the site).
   tap/click — click-to-toggle is the touch-device fallback since hover alone isn't
   reachable there. The pulsing ring cue carries `motion-reduce:animate-none`; the popover's
   Framer Motion enter/exit is duration-reduced (not skipped) under `useReducedMotion()` so
-  screen readers relying on visible state changes still get one.
+  screen readers relying on visible state changes still get one. `popoverPosition` per
+  hotspot follows its vertical position (upper-half points open the popover downward,
+  lower-half points open it upward) so the popover always has room within the card instead
+  of spilling past its edge. The Fleet interior card's outer wrapper does **not** carry
+  `overflow-hidden` (unlike the exterior card) — `LuxuryImagePlaceholder` already clips its
+  own image internally, and an outer `overflow-hidden` was silently clipping hotspot
+  popovers that render outside the image bounds.
 - **`GrainOverlay.tsx`**: a single `fixed inset-0` div with the `.grain-overlay` SVG
   noise texture, `opacity-20`, `mix-blend-overlay`, `pointer-events-none`, mounted once in
   `layout.tsx` above `<LanguageProvider>` so it covers the whole site rather than just Hero.

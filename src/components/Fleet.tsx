@@ -38,7 +38,7 @@ export default function Fleet() {
           <RevealSection direction="left" className="space-y-6 lg:col-span-2">
             <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
               <LuxuryImagePlaceholder
-                src="/images/fleet/vehicle-exterior.jpg"
+                srcBase="/images/fleet/vehicle-exterior"
                 alt={t.fleet.vehicleName}
                 icon={Car}
                 label={t.fleet.vehicleClass}
@@ -68,10 +68,10 @@ export default function Fleet() {
               </div>
             </div>
 
-            <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
+            <div className="glass-panel rounded-2xl shadow-gold-lg">
               <div className="relative">
                 <LuxuryImagePlaceholder
-                  src="/images/fleet/vehicle-interior.jpg"
+                  srcBase="/images/fleet/vehicle-interior"
                   alt={`${t.fleet.vehicleName} — ${t.fleet.interiorLabel}`}
                   icon={Armchair}
                   label={t.fleet.interiorLabel}

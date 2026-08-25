@@ -16,34 +16,40 @@ interface Hotspot {
  * Short brand-style feature tags, intentionally kept in English across all
  * locales — the same "wordmark" treatment as LuxuryBadge (see CLAUDE.md).
  */
+/**
+ * popoverPosition follows each hotspot's vertical position: points in the
+ * upper half of the image open downward ("bottom") and points in the lower
+ * half open upward ("top"), so the popover always has room to render within
+ * the card instead of spilling past its top or bottom edge.
+ */
 const HOTSPOTS: Hotspot[] = [
   {
     x: "28%",
     y: "32%",
     label: "Nappa Leather",
     description: "Hand-finished full-grain leather throughout the cabin.",
-    popoverPosition: "top",
+    popoverPosition: "bottom",
   },
   {
     x: "50%",
     y: "24%",
     label: "Acoustic Glass",
     description: "Laminated glazing cancels road and wind noise.",
-    popoverPosition: "top",
+    popoverPosition: "bottom",
   },
   {
     x: "72%",
     y: "34%",
     label: "Climate Control",
     description: "Independent zones keep every passenger comfortable.",
-    popoverPosition: "top",
+    popoverPosition: "bottom",
   },
   {
     x: "40%",
     y: "62%",
     label: "High-Speed Wi-Fi",
     description: "Stay connected with onboard broadband and charging.",
-    popoverPosition: "bottom",
+    popoverPosition: "top",
   },
 ];
 
@@ -94,7 +100,7 @@ export default function CabinHotspots() {
                     : { opacity: 0, y: hotspot.popoverPosition === "top" ? 6 : -6, scale: 0.95 }
                 }
                 transition={{ duration: shouldReduceMotion ? 0.1 : 0.2 }}
-                className={`glass-deep absolute left-1/2 z-10 w-44 -translate-x-1/2 rounded-xl p-3 text-left shadow-gold-lg ${
+                className={`glass-deep absolute left-1/2 z-20 w-44 -translate-x-1/2 rounded-xl p-3 text-left shadow-gold-lg ${
                   hotspot.popoverPosition === "top" ? "bottom-full mb-3" : "top-full mt-3"
                 }`}
               >

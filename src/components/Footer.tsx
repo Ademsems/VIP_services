@@ -2,7 +2,7 @@
 
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
+import { buildTelLink, DIRECT_WHATSAPP_LINK, LEGAL_ENTITY, SITE_CONFIG } from "@/lib/config";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -94,13 +94,34 @@ export default function Footer() {
             {t.footer.legal}
           </h4>
           <p className="mt-4 text-sm text-slate-body">{t.footer.licensed}</p>
+          <address className="mt-4 text-xs not-italic leading-relaxed text-slate-body/70">
+            {LEGAL_ENTITY.name}
+            <br />
+            {LEGAL_ENTITY.addressLine}
+            <br />
+            {LEGAL_ENTITY.cityLine}
+            <br />
+            IČO: {LEGAL_ENTITY.ico}
+            <br />
+            DIČ: {LEGAL_ENTITY.dic}
+          </address>
         </div>
       </div>
 
       <div className="border-t border-border py-6">
-        <p className="section-container text-center text-xs text-slate-body/70">
-          © {year} {SITE_CONFIG.companyName} — {SITE_CONFIG.ownerName}. {t.footer.rights}
-        </p>
+        <div className="section-container flex flex-col items-center gap-2 text-xs text-slate-body/70 sm:flex-row sm:justify-between">
+          <p>
+            © {year} {SITE_CONFIG.companyName} — {SITE_CONFIG.ownerName}. {t.footer.rights}
+          </p>
+          <a
+            href="https://dunajmedia.sk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="focus-gold rounded-sm transition-colors duration-200 hover:text-gold"
+          >
+            Designed by DunajMedia
+          </a>
+        </div>
       </div>
     </footer>
   );

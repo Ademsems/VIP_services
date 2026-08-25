@@ -32,7 +32,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]" />
 
       <HeroVisual
-        src="/images/hero/hero-executive-mercedes.jpg"
+        srcBase="/images/hero/hero-executive-mercedes"
         className={`pointer-events-none absolute -right-24 bottom-0 hidden w-[900px] max-w-none opacity-70 lg:block ${
           shouldReduceMotion ? "" : "animate-float"
         }`}

@@ -9,6 +9,20 @@ export const SITE_CONFIG = {
   url: "https://vipservice.sk",
 };
 
+/**
+ * Statutory registration details for the operating legal entity — required
+ * disclosure on Slovak commercial websites. Kept as raw facts (not i18n
+ * copy): a company's registered name, address, and ID numbers don't
+ * translate.
+ */
+export const LEGAL_ENTITY = {
+  name: "Queen Suzanne Investment - QSI, s.r.o.",
+  addressLine: "Furdekova 8",
+  cityLine: "Bratislava 851 03",
+  ico: "52977005",
+  dic: "2121247403",
+};
+
 export function buildWhatsAppLink(message: string) {
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encoded}`;
