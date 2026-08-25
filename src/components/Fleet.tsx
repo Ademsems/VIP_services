@@ -26,7 +26,7 @@ export default function Fleet() {
           <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             {t.nav.fleet}
           </span>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">
+          <h2 className="mt-3 text-balance font-display text-3xl font-semibold text-white sm:text-4xl">
             {t.fleet.title}
           </h2>
           <p className="mt-4 text-slate-body">{t.fleet.subtitle}</p>
@@ -34,7 +34,7 @@ export default function Fleet() {
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:items-start">
           <RevealSection direction="left" className="lg:col-span-2">
-            <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-gold-lg">
+            <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
               <LuxuryImagePlaceholder
                 alt={t.fleet.vehicleName}
                 icon={Car}
@@ -49,7 +49,7 @@ export default function Fleet() {
                   {t.fleet.vehicleClass}
                 </p>
 
-                <div className="mt-4 flex gap-4 border-t border-border pt-4 text-sm text-slate-body">
+                <div className="mt-4 flex gap-4 border-t border-border/80 pt-4 text-sm text-slate-body">
                   <span className="flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-gold" />
                     {t.fleet.passengers}
@@ -70,12 +70,12 @@ export default function Fleet() {
                 <RevealSection
                   key={amenity.title}
                   direction="right"
-                  delay={idx * 0.08}
+                  delay={idx * 0.06}
                 >
                   <motion.div
                     whileHover={{ y: -6 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="h-full rounded-2xl border border-border bg-surface p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
+                    className="glass-panel h-full rounded-2xl p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
                   >
                     <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
                       <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />

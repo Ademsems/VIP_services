@@ -55,7 +55,7 @@ export default function Navbar() {
             e.preventDefault();
             handleNavClick("#home");
           }}
-          className="flex items-center gap-2 font-display text-xl tracking-[0.15em] text-white"
+          className="focus-gold flex items-center gap-2 rounded-sm font-display text-xl tracking-[0.15em] text-white"
         >
           <span className="text-gradient-gold font-semibold">VIP</span>
           <span className="text-white/90">SERVICE</span>
@@ -66,7 +66,7 @@ export default function Navbar() {
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}
-              className="text-sm font-medium text-slate-body transition-colors duration-200 hover:text-gold"
+              className="focus-gold cursor-pointer rounded-sm text-sm font-medium text-slate-body transition-colors duration-200 hover:text-gold"
             >
               {t.nav[link.key]}
             </button>
@@ -79,7 +79,7 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t.common.whatsapp}
-            className="hidden items-center justify-center rounded-full border border-border p-2 text-slate-body transition-colors hover:border-gold/50 hover:text-gold sm:flex"
+            className="focus-gold hidden items-center justify-center rounded-full border border-border p-2 text-slate-body transition-colors duration-200 hover:border-gold/50 hover:text-gold sm:flex"
           >
             <MessageCircle className="h-4 w-4" />
           </a>
@@ -87,7 +87,9 @@ export default function Navbar() {
           <div className="relative hidden sm:block">
             <button
               onClick={() => setLangOpen((v) => !v)}
-              className="flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-slate-body transition-colors hover:border-gold/50 hover:text-gold"
+              aria-label="Change language"
+              aria-expanded={langOpen}
+              className="focus-gold flex cursor-pointer items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-slate-body transition-colors duration-200 hover:border-gold/50 hover:text-gold"
             >
               <Globe className="h-3.5 w-3.5" />
               {LOCALE_LABELS[locale]}
@@ -108,7 +110,7 @@ export default function Navbar() {
                         setLocale(l);
                         setLangOpen(false);
                       }}
-                      className={`block w-full px-3 py-2 text-left text-xs font-medium transition-colors ${
+                      className={`focus-gold block w-full cursor-pointer px-3 py-2 text-left text-xs font-medium transition-colors duration-200 ${
                         locale === l
                           ? "bg-gold/10 text-gold"
                           : "text-slate-body hover:bg-white/5 hover:text-white"
@@ -124,15 +126,16 @@ export default function Navbar() {
 
           <button
             onClick={() => handleNavClick("#booking")}
-            className="hidden rounded-full bg-gold-gradient px-5 py-2.5 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 sm:block"
+            className="focus-gold hidden cursor-pointer rounded-full bg-gold-gradient px-5 py-2.5 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 active:scale-95 sm:block"
           >
             {t.nav.bookTransfer}
           </button>
 
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="text-white lg:hidden"
+            className="focus-gold cursor-pointer text-white lg:hidden"
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -153,7 +156,7 @@ export default function Navbar() {
                 <button
                   key={link.href}
                   onClick={() => handleNavClick(link.href)}
-                  className="rounded-md px-2 py-3 text-left text-sm font-medium text-slate-body hover:bg-white/5 hover:text-gold"
+                  className="focus-gold cursor-pointer rounded-md px-2 py-3 text-left text-sm font-medium text-slate-body transition-colors duration-200 hover:bg-white/5 hover:text-gold"
                 >
                   {t.nav[link.key]}
                 </button>
@@ -163,7 +166,7 @@ export default function Navbar() {
                   <button
                     key={l}
                     onClick={() => setLocale(l)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium ${
+                    className={`focus-gold cursor-pointer rounded-full border px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
                       locale === l
                         ? "border-gold text-gold"
                         : "border-border text-slate-body"
@@ -175,7 +178,7 @@ export default function Navbar() {
               </div>
               <button
                 onClick={() => handleNavClick("#booking")}
-                className="mt-3 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-obsidian"
+                className="focus-gold mt-3 cursor-pointer rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-obsidian transition-transform duration-200 active:scale-95"
               >
                 {t.nav.bookTransfer}
               </button>

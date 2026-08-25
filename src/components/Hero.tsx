@@ -1,12 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, Phone, MessageCircle, ShieldCheck, Clock, PlaneTakeoff } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
 
 export default function Hero() {
   const { t } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
 
   const scrollTo = (href: string) =>
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
@@ -40,7 +41,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="max-w-4xl font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
+          className="max-w-4xl text-balance font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
         >
           {t.hero.headline}
         </motion.h1>
@@ -62,13 +63,13 @@ export default function Hero() {
         >
           <button
             onClick={() => scrollTo("#booking")}
-            className="rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105"
+            className="focus-gold cursor-pointer rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 active:scale-95"
           >
             {t.hero.ctaPrimary}
           </button>
           <button
             onClick={() => scrollTo("#fleet")}
-            className="rounded-full border border-border px-8 py-4 text-sm font-semibold text-white transition-colors duration-200 hover:border-gold/50 hover:text-gold"
+            className="focus-gold cursor-pointer rounded-full border border-border px-8 py-4 text-sm font-semibold text-white transition-colors duration-200 hover:border-gold/50 hover:text-gold active:scale-95"
           >
             {t.hero.ctaSecondary}
           </button>
@@ -82,7 +83,7 @@ export default function Hero() {
         >
           <a
             href={buildTelLink()}
-            className="flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:border-gold/50"
+            className="focus-gold glass-panel flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-medium text-white transition-colors duration-200 hover:border-gold/50"
           >
             <Phone className="h-4 w-4 text-gold" />
             {SITE_CONFIG.phoneDisplay}
@@ -91,7 +92,7 @@ export default function Hero() {
             href={DIRECT_WHATSAPP_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:border-gold/50"
+            className="focus-gold glass-panel flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-medium text-white transition-colors duration-200 hover:border-gold/50"
           >
             <MessageCircle className="h-4 w-4 text-gold" />
             {t.common.whatsapp}
@@ -105,8 +106,8 @@ export default function Hero() {
           className="mt-14 grid grid-cols-1 gap-4 border-t border-border pt-8 sm:grid-cols-3"
         >
           {trustMarkers.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
+            <div key={label} className="group flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold/30 bg-gold/5 transition-colors duration-200 group-hover:border-gold/60 group-hover:bg-gold/10">
                 <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />
               </div>
               <span className="text-sm font-medium text-white">{label}</span>
@@ -116,7 +117,7 @@ export default function Hero() {
       </div>
 
       <motion.div
-        animate={{ y: [0, 10, 0] }}
+        animate={shouldReduceMotion ? {} : { y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-xs text-slate-body"
       >

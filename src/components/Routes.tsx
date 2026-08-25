@@ -15,7 +15,7 @@ export default function Routes() {
           <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             {t.nav.routes}
           </span>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">
+          <h2 className="mt-3 text-balance font-display text-3xl font-semibold text-white sm:text-4xl">
             {t.routes.title}
           </h2>
           <p className="mt-4 text-slate-body">{t.routes.subtitle}</p>
@@ -26,12 +26,12 @@ export default function Routes() {
             <RevealSection
               key={`${item.from}-${item.to}`}
               direction={idx % 2 === 0 ? "left" : "right"}
-              delay={idx * 0.08}
+              delay={idx * 0.06}
             >
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="flex items-center justify-between rounded-2xl border border-border bg-surface p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
+                className="glass-panel flex items-center justify-between rounded-2xl p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
               >
                 <div>
                   <div className="flex items-center gap-2 text-base font-semibold text-white">
@@ -44,7 +44,7 @@ export default function Routes() {
                     {item.duration}
                   </div>
                 </div>
-                <div className="font-display text-xl font-semibold text-gradient-gold">
+                <div className="font-display text-xl font-semibold tabular-nums text-gradient-gold">
                   {item.price}
                 </div>
               </motion.div>

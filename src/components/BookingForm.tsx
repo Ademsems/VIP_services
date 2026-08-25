@@ -44,7 +44,7 @@ export default function BookingForm() {
           <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             {t.nav.booking}
           </span>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">
+          <h2 className="mt-3 text-balance font-display text-3xl font-semibold text-white sm:text-4xl">
             {t.booking.title}
           </h2>
           <p className="mt-4 text-slate-body">{t.booking.subtitle}</p>
@@ -53,7 +53,7 @@ export default function BookingForm() {
         <RevealSection direction="right" delay={0.1}>
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="rounded-2xl border border-border bg-surface p-6 shadow-gold-lg sm:p-10"
+            className="glass-panel rounded-2xl p-6 shadow-gold-lg sm:p-10"
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="md:col-span-2">
@@ -63,7 +63,7 @@ export default function BookingForm() {
                 <select
                   value={route}
                   onChange={(e) => setRoute(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+                  className="w-full cursor-pointer rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40"
                 >
                   {t.booking.routeOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -82,7 +82,7 @@ export default function BookingForm() {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold [color-scheme:dark]"
+                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40 [color-scheme:dark]"
                 />
               </div>
 
@@ -95,7 +95,7 @@ export default function BookingForm() {
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold [color-scheme:dark]"
+                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40 [color-scheme:dark]"
                 />
               </div>
 
@@ -110,7 +110,7 @@ export default function BookingForm() {
                   max={16}
                   value={passengers}
                   onChange={(e) => setPassengers(Number(e.target.value))}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40"
                 />
               </div>
 
@@ -125,7 +125,7 @@ export default function BookingForm() {
                   max={20}
                   value={luggage}
                   onChange={(e) => setLuggage(Number(e.target.value))}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40"
                 />
               </div>
 
@@ -137,7 +137,7 @@ export default function BookingForm() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40"
                 />
               </div>
 
@@ -149,7 +149,7 @@ export default function BookingForm() {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+                  className="w-full rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 focus:border-gold focus:ring-1 focus:ring-gold/40"
                 />
               </div>
 
@@ -162,7 +162,7 @@ export default function BookingForm() {
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder={t.booking.notesPlaceholder}
                   rows={3}
-                  className="w-full resize-none rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-slate-body/50 focus:border-gold"
+                  className="w-full resize-none rounded-lg border border-border bg-obsidian px-4 py-3 text-sm text-white outline-none transition-colors duration-200 placeholder:text-slate-body/50 focus:border-gold focus:ring-1 focus:ring-gold/40"
                 />
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function BookingForm() {
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-[1.02]"
+              className="focus-gold mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-[1.02] active:scale-95"
             >
               <MessageCircle className="h-4 w-4" />
               {t.booking.submit}

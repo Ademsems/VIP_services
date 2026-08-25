@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
 
 interface RevealSectionProps {
@@ -16,19 +16,26 @@ export default function RevealSection({
   delay = 0,
   className = "",
 }: RevealSectionProps) {
-  const initial =
-    direction === "left"
-      ? { x: -50, opacity: 0 }
-      : direction === "right"
-      ? { x: 50, opacity: 0 }
-      : { y: 40, opacity: 0 };
+  const shouldReduceMotion = useReducedMotion();
+
+  const initial = shouldReduceMotion
+    ? { opacity: 0 }
+    : direction === "left"
+    ? { x: -50, opacity: 0 }
+    : direction === "right"
+    ? { x: 50, opacity: 0 }
+    : { y: 40, opacity: 0 };
 
   return (
     <motion.div
       initial={initial}
       whileInView={{ x: 0, y: 0, opacity: 1 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: shouldReduceMotion ? 0.2 : 0.7,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className={className}
     >
       {children}

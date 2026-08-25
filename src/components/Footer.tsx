@@ -39,7 +39,7 @@ export default function Footer() {
               <li key={link.href}>
                 <button
                   onClick={() => scrollTo(link.href)}
-                  className="text-sm text-slate-body transition-colors hover:text-gold"
+                  className="focus-gold cursor-pointer rounded-sm text-sm text-slate-body transition-colors duration-200 hover:text-gold"
                 >
                   {link.key}
                 </button>
@@ -54,7 +54,10 @@ export default function Footer() {
           </h4>
           <ul className="mt-4 space-y-3 text-sm text-slate-body">
             <li>
-              <a href={buildTelLink()} className="flex items-center gap-2 hover:text-gold">
+              <a
+                href={buildTelLink()}
+                className="focus-gold flex items-center gap-2 rounded-sm transition-colors duration-200 hover:text-gold"
+              >
                 <Phone className="h-4 w-4 text-gold" />
                 {SITE_CONFIG.phoneDisplay}
               </a>
@@ -64,14 +67,17 @@ export default function Footer() {
                 href={DIRECT_WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-gold"
+                className="focus-gold flex items-center gap-2 rounded-sm transition-colors duration-200 hover:text-gold"
               >
                 <MessageCircle className="h-4 w-4 text-gold" />
                 {t.common.whatsapp}
               </a>
             </li>
             <li>
-              <a href={`mailto:${SITE_CONFIG.email}`} className="flex items-center gap-2 hover:text-gold">
+              <a
+                href={`mailto:${SITE_CONFIG.email}`}
+                className="focus-gold flex items-center gap-2 rounded-sm transition-colors duration-200 hover:text-gold"
+              >
                 <Mail className="h-4 w-4 text-gold" />
                 {SITE_CONFIG.email}
               </a>

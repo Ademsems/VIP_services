@@ -70,11 +70,20 @@ Defined in `tailwind.config.ts` (`theme.extend`):
 Custom utilities: `bg-gold-gradient` (135° gold sweep, used on primary CTAs),
 `bg-mesh-gold` (radial gold glow, used behind Hero/About), `shadow-gold` /
 `shadow-gold-lg` (soft gold glow shadows), `.text-gradient-gold` (gold gradient text
-clip, used for price figures and logo mark).
+clip, used for price figures and logo mark), `.glass-panel` (frosted-glass card treatment:
+`border-border/80` + `bg-surface/80` + `backdrop-blur-md` — the default surface for every
+card/panel on the site, replacing flat `bg-surface`), `.focus-gold` (consistent keyboard
+focus ring: `focus-visible:ring-2 ring-gold ring-offset-2 ring-offset-obsidian`, applied to
+every interactive element site-wide).
 
 Fonts: `Playfair Display` (`font-display`, headings) + `Inter` (`font-sans`, body),
 loaded via `next/font/google` in `layout.tsx` and exposed as CSS vars
 `--font-playfair` / `--font-inter`.
+
+**Contrast verified** (WCAG): gold `#D4AF37` on obsidian `#050505` = 9.69:1, slate.body
+`#94A3B8` on obsidian = 7.95:1, white on surface `#0F1117` = 18.87:1 — every text pairing
+in the palette clears AAA (7:1), not just the AA minimum (4.5:1). No color changes were
+needed; the original palette was already accessible.
 
 ## Motion Settings
 
@@ -82,11 +91,43 @@ loaded via `next/font/google` in `layout.tsx` and exposed as CSS vars
   content, animating from `x: -50` (`direction="left"`) or `x: 50` (`direction="right"`) or
   `y: 40` (`direction="up"`, default) to `0`, `opacity 0 → 1`, `duration: 0.7`,
   `ease: [0.22, 1, 0.36, 1]`, `viewport: { once: true, margin: "-80px" }`. Sections alternate
-  left/right per grid item using `idx % 2`.
-- **Micro-interactions**: card hover uses `whileHover={{ y: -8 }}` (Fleet/About) or
-  `whileHover={{ scale: 1.02 }}` (Routes), plus CSS `transition-colors` / `hover:shadow-gold`
-  for border-glow. Buttons use `hover:scale-105` with `transition-transform`.
+  left/right per grid item using `idx % 2`. Grid-item stagger delay is `idx * 0.06` (Fleet
+  amenities, Routes cards, About pillars) — tightened from an earlier `idx * 0.1` for a
+  snappier, more premium reveal rhythm.
+- **Micro-interactions**: card hover uses `whileHover={{ y: -6 }}` (Fleet/About) or
+  `whileHover={{ scale: 1.02 }}` (Routes), plus CSS `transition-colors duration-200/300` /
+  `hover:shadow-gold` for border-glow. Buttons use `hover:scale-105 active:scale-95` with
+  `transition-transform` — the `active:scale-95` press state is applied to every clickable
+  CTA/button/link site-wide for tactile feedback on click/tap.
 - Hero's scroll-hint chevron loops with `animate={{ y: [0, 10, 0] }}`, `repeat: Infinity`.
+
+### Reduced-motion support
+
+Every animation on the site respects `prefers-reduced-motion`, on two layers:
+
+1. **Framer Motion components** (`RevealSection`, `Hero`'s chevron loop) call
+   `useReducedMotion()` and skip the transform/loop when the user has reduced motion
+   enabled — content still fades in (opacity only) rather than never appearing.
+2. **Raw CSS `animate-*` utilities** (the `LuxuryImagePlaceholder` shimmer sweep, the
+   `FloatingWhatsApp` pulse ring) carry `motion-reduce:animate-none`.
+3. A global fallback in `globals.css` clamps all animation/transition durations to
+   `0.01ms` under `@media (prefers-reduced-motion: reduce)`, as a safety net for anything
+   not explicitly guarded above.
+
+### Accessibility & interaction polish
+
+- **Focus visibility**: every button, link, and form control carries `.focus-gold` (or an
+  inline `focus:ring-1 focus:ring-gold/40` on form inputs) — a 2px gold ring visible only
+  on keyboard focus (`:focus-visible`), never on mouse click.
+- **Cursor affordance**: all custom `<button>`/interactive `<div>` elements carry
+  `cursor-pointer` explicitly (native `<button>` defaults to `cursor: default`, not
+  `pointer`, in most browsers).
+- **ARIA**: icon-only controls (language switcher, mobile menu toggle, WhatsApp icon links)
+  carry `aria-label`; the language switcher and mobile menu also expose `aria-expanded`.
+- **`tabular-nums`** on the Routes price figures keeps corridor cards visually aligned
+  when locale-switching changes digit widths.
+- **`text-balance`** on every major heading (`h1`/`h2`) prevents orphaned single words on
+  the last line of wrapped headlines.
 
 ## i18n
 

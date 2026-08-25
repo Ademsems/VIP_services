@@ -19,7 +19,7 @@ export default function About() {
           <span className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             {t.nav.about}
           </span>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">
+          <h2 className="mt-3 text-balance font-display text-3xl font-semibold text-white sm:text-4xl">
             {t.about.title}
           </h2>
           <p className="mt-4 text-slate-body">{t.about.subtitle}</p>
@@ -32,12 +32,12 @@ export default function About() {
               <RevealSection
                 key={pillar.title}
                 direction={idx % 2 === 0 ? "left" : "right"}
-                delay={idx * 0.1}
+                delay={idx * 0.06}
               >
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="h-full rounded-2xl border border-border bg-surface p-6 transition-colors duration-300 hover:border-gold/40"
+                  className="glass-panel h-full rounded-2xl p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
                     <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />

@@ -47,7 +47,7 @@ export default function LuxuryImagePlaceholder({
 
       {!showImage && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-mesh-gold bg-[#0F1117]">
-          <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(135deg,transparent_40%,rgba(212,175,55,0.08)_50%,transparent_60%)] bg-[length:250%_250%] animate-shimmer" />
+          <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(135deg,transparent_40%,rgba(212,175,55,0.08)_50%,transparent_60%)] bg-[length:250%_250%] animate-shimmer motion-reduce:animate-none" />
           <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-gold/30 bg-obsidian/60">
             <Icon className="h-7 w-7 text-gold" strokeWidth={1.5} />
           </div>
