@@ -58,6 +58,7 @@ const de: Messages = {
     vehicleClass: "Executive Black Edition",
     passengers: "3 Passagiere",
     luggage: "3-4 große Koffer",
+    interiorLabel: "Innenraum",
     amenities: [
       {
         title: "Executive Black Edition Standard",

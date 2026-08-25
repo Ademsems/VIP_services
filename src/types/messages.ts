@@ -48,6 +48,7 @@ export interface Messages {
     vehicleClass: string;
     passengers: string;
     luggage: string;
+    interiorLabel: string;
     amenities: {
       title: string;
       description: string;

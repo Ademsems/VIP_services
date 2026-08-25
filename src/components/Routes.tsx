@@ -1,9 +1,18 @@
 "use client";
 
-import { ArrowRight, Clock3 } from "lucide-react";
+import { ArrowRight, Clock3, MapPin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import RevealSection from "./RevealSection";
 import TiltCard from "./TiltCard";
+import LuxuryImagePlaceholder from "./LuxuryImagePlaceholder";
+
+/** Indexed to match t.routes.items order: Vienna Airport, Vienna City, Budapest, Prague. */
+const ROUTE_IMAGES = [
+  "/images/routes/route-vienna-airport.jpg",
+  "/images/routes/route-vienna-city.jpg",
+  "/images/routes/route-budapest.jpg",
+  "/images/routes/route-prague.jpg",
+];
 
 export default function Routes() {
   const { t } = useLanguage();
@@ -32,15 +41,23 @@ export default function Routes() {
                 maxTilt={6}
                 className="glass-deep flex items-center justify-between rounded-2xl p-6"
               >
-                <div>
-                  <div className="flex items-center gap-2 text-base font-semibold text-white">
-                    <span>{item.from}</span>
-                    <ArrowRight className="h-4 w-4 text-gold" />
-                    <span>{item.to}</span>
-                  </div>
-                  <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-body">
-                    <Clock3 className="h-3.5 w-3.5" />
-                    {item.duration}
+                <div className="flex items-center gap-4">
+                  <LuxuryImagePlaceholder
+                    src={ROUTE_IMAGES[idx]}
+                    alt={`${item.from} to ${item.to}`}
+                    icon={MapPin}
+                    className="h-16 w-16 shrink-0"
+                  />
+                  <div>
+                    <div className="flex items-center gap-2 text-base font-semibold text-white">
+                      <span>{item.from}</span>
+                      <ArrowRight className="h-4 w-4 text-gold" />
+                      <span>{item.to}</span>
+                    </div>
+                    <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-body">
+                      <Clock3 className="h-3.5 w-3.5" />
+                      {item.duration}
+                    </div>
                   </div>
                 </div>
                 <div className="font-display text-xl font-semibold tabular-nums text-gradient-gold">

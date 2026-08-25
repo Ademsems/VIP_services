@@ -25,16 +25,17 @@ src/
 │   ├── Navbar.tsx              Floating blur header, smooth-scroll nav, language switcher,
 │   │                          gold "Book Transfer" CTA, mobile drawer
 │   ├── Hero.tsx                 #home — headline, trust markers, dual CTA, phone/WhatsApp chips
-│   ├── Fleet.tsx                 #fleet — single-vehicle showcase: image/spec card + a
-│   │                          6-item onboard-amenities grid with hover reveal
-│   ├── Routes.tsx                #routes — fixed-rate corridor cards
-│   ├── About.tsx                  #about — 4 trust pillars (discretion, punctuality,
-│   │                          flight monitoring, meet & greet)
+│   ├── Fleet.tsx                 #fleet — single-vehicle showcase: exterior + interior
+│   │                          image cards, spec sheet, and a 6-item onboard-amenities grid
+│   ├── Routes.tsx                #routes — fixed-rate corridor cards with destination thumbnails
+│   ├── About.tsx                  #about — 4 trust pillars over an atmospheric photo backdrop
+│   │                          (discretion, punctuality, flight monitoring, meet & greet)
 │   ├── BookingForm.tsx             #booking — corridor selector → date/time → passengers/
 │   │                          luggage → contact → 1-tap WhatsApp dispatch link
 │   ├── Footer.tsx                   #footer — company info, quick links, contact, legal notice
 │   ├── FloatingWhatsApp.tsx          Fixed bottom-right pulsing WhatsApp quick-dispatch button
 │   ├── LuxuryImagePlaceholder.tsx    Reusable image + CSS/SVG fallback (see below)
+│   ├── HeroVisual.tsx                Hero-specific image + CarSilhouette fallback (see below)
 │   ├── RevealSection.tsx             Shared scroll-entrance wrapper (framer-motion)
 │   ├── TiltCard.tsx                  Pointer-driven 3D tilt wrapper (see Immersive UI below)
 │   ├── MouseSpotlight.tsx            Cursor-tracking ambient radial glow, used in Hero
@@ -183,21 +184,65 @@ To update contact details site-wide, edit only `SITE_CONFIG` and `DIRECT_WHATSAP
 
 ## Image Fallback Strategy
 
-`LuxuryImagePlaceholder` (`src/components/LuxuryImagePlaceholder.tsx`) is the only way
-images are rendered on the site:
+Two components render images, and both follow the same contract: try a real photo, fall
+back to a CSS/SVG treatment on missing file or load failure — never a broken image icon,
+never a build failure.
 
-1. If an `src` prop is passed, it renders `next/image` with `fill` + `onError`.
-2. If `src` is omitted, or the `<Image>` fires `onError` (broken/unreachable URL), it renders
-   a CSS/SVG fallback: a `bg-mesh-gold` gradient panel, an animated shimmer sweep
-   (`animate-shimmer` keyframe), a centered Lucide icon in a gold-ringed circle, and an
-   optional uppercase label.
-3. Because the current build passes **no external `src` values at all** (Fleet cards render
-   icon-only placeholders), `next build` never depends on network image availability —
-   it is 100% deterministic and cannot fail on missing/unreachable assets.
-4. To add real photography later: pass `src="/vehicles/s-class.jpg"` (local `public/` asset,
-   safest) or a remote URL registered in `next.config.mjs` `images.remotePatterns`. The
-   placeholder remains as the loading/error fallback either way — no other code changes
-   needed.
+- **`LuxuryImagePlaceholder`** (`src/components/LuxuryImagePlaceholder.tsx`): the general
+  card-image component. If `src` is passed, renders `next/image` with `fill` + `onError`.
+  If `src` is omitted, or the `<Image>` fires `onError`, it renders a `bg-mesh-gold`
+  gradient panel, an animated shimmer sweep (`animate-shimmer`, `motion-reduce:animate-none`
+  guarded), a centered Lucide icon in a gold-ringed circle, and an optional uppercase label.
+- **`HeroVisual`** (`src/components/HeroVisual.tsx`): the same try-photo-then-fall-back
+  contract, adapted for Hero's borderless, absolutely-positioned placement. Falls back to
+  the hand-drawn `CarSilhouette` SVG (not a generic icon) instead — the "cinematic
+  silhouette" *is* the fallback for the hero photo, not a separate concept.
+- **`About.tsx`**'s atmospheric backdrop is a one-off `next/image` + local `useState`
+  error handler (not worth its own component for a single full-bleed usage) — on failure
+  it simply doesn't render, leaving the existing `bg-gold/5 blur` glow as the backdrop.
+
+All `src` values point to **local `public/` files only** — no remote URLs, no
+`next.config.mjs` `images.remotePatterns` needed. Because every image reference in the code
+is a plain string path (not a build-time `import`), `next build` never depends on whether
+the file actually exists: a missing file 404s at *request* time and the `onError` handler
+engages, exactly like a broken remote URL would. This means the real-photography wiring
+below is live in the code right now, and the site renders its graceful fallbacks (SVG
+silhouette, icon placeholders, CSS glow) until the actual files are dropped into `public/`.
+
+### Real photography asset spec
+
+| File | Used by | Aspect | Dimensions | Actual format |
+|---|---|---|---|---|
+| `public/images/hero/hero-executive-mercedes.jpg` | `Hero.tsx` → `HeroVisual` | 900:320 (~2.8:1) | 1376 × 768 | JPEG |
+| `public/images/fleet/vehicle-exterior.jpg` | `Fleet.tsx` exterior card | 4:3 | 1600 × 1066 | JPEG |
+| `public/images/fleet/vehicle-interior.jpg` | `Fleet.tsx` interior card (carries `CabinHotspots`) | 4:3 | 1200 × 896 | JPEG |
+| `public/images/routes/route-vienna-airport.jpg` | `Routes.tsx` item 0 | 1:1 | 400 × 400 | JPEG |
+| `public/images/routes/route-vienna-city.jpg` | `Routes.tsx` item 1 | 1:1 | 400 × 400 | JPEG |
+| `public/images/routes/route-budapest.jpg` | `Routes.tsx` item 2 | 1:1 | 400 × 400 | JPEG |
+| `public/images/routes/route-prague.jpg` | `Routes.tsx` item 3 | 1:1 | 400 × 400 | JPEG |
+| `public/images/about/about-atmosphere.png` | `About.tsx` backdrop | 16:9 | 1920 × 1081 | PNG |
+
+**Format note**: the original spec called for `.webp` throughout; the files actually
+supplied are JPEG/PNG. Extensions were corrected to match real content (`file --mime-type`
+verified) rather than kept as `.webp` — a `.webp`-named file that's actually a JPEG serves
+an incorrect `Content-Type: image/webp` header when requested directly (bypassing the
+`next/image` optimizer, which transcodes and gets the header right regardless of source
+extension), which is a real defect: browsers, social-share link unfurlers, and any tooling
+that trusts the declared MIME type over sniffing content can fail to render it. If
+re-exporting these as true WebP later, only the extension + these six `src` strings need
+to change (`About.tsx`, `Fleet.tsx` ×2, `Hero.tsx`, `Routes.tsx`'s `ROUTE_IMAGES` array).
+
+Route thumbnails are matched to `t.routes.items` **by array index**, not by parsing the
+localized city name (`ROUTE_IMAGES[idx]` in `Routes.tsx`) — the four corridors are the same
+across all three locales, only their labels translate, so index order is a stable key.
+
+`CabinHotspots` (Nappa Leather / Acoustic Glass / Climate Control / High-Speed Wi-Fi) was
+moved from the exterior card onto the new interior card — those are cabin features, so they
+now annotate the cabin photo instead of the exterior shot, which is the more sensible
+pairing.
+
+To drop in real photography: place files at the exact paths above — no code changes
+needed, the components already reference them.
 
 ## SEO & Structured Data
 
@@ -227,9 +272,10 @@ vehicle rather than a fleet to choose from (see Vehicle Showcase below).
   chilled water. Every locale (`en`/`de`/`sk`) implements this schema; the section title
   translates to "Executive Vehicle & Onboard Experience" (EN), "Premium Fahrzeug & Komfort"
   (DE), "Prémiové Vozidlo & Komfort" (SK).
-- **Layout**: a single `LuxuryImagePlaceholder` + spec card (name, class, passengers,
-  luggage) on the left, and a responsive 2-column grid of the 6 amenity cards on the right,
-  each with a Lucide icon (`Car`, `Armchair`, `Wifi`, `Briefcase`, `Snowflake`,
+- **Layout**: two stacked `LuxuryImagePlaceholder` cards on the left — exterior (with the
+  spec sheet: name, class, passengers, luggage) and interior (carrying `CabinHotspots`) —
+  and a responsive 2-column grid of the 6 amenity cards on the right, each with a Lucide
+  icon (`Car`, `Armchair`, `Wifi`, `Briefcase`, `Snowflake`,
   `GlassWater`), alternating scroll-reveal directions and `whileHover={{ y: -6 }}` lift.
 - To add a second vehicle in the future, `t.fleet` would need to change from a single
   object back to an array (as in the original multi-vehicle draft) — this is a deliberate,

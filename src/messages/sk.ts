@@ -58,6 +58,7 @@ const sk: Messages = {
     vehicleClass: "Executive Black Edition",
     passengers: "3 cestujúci",
     luggage: "3-4 veľké kufre",
+    interiorLabel: "Interiér kabíny",
     amenities: [
       {
         title: "Štandard Executive Black Edition",

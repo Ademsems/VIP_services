@@ -5,7 +5,7 @@ import { ChevronDown, Phone, MessageCircle, ShieldCheck, Clock, PlaneTakeoff } f
 import { useLanguage } from "@/context/LanguageContext";
 import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
 import MouseSpotlight from "./MouseSpotlight";
-import CarSilhouette from "./CarSilhouette";
+import HeroVisual from "./HeroVisual";
 import LuxuryBadge from "./LuxuryBadge";
 
 export default function Hero() {
@@ -31,7 +31,8 @@ export default function Hero() {
       <div className="pointer-events-none absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-gold/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]" />
 
-      <CarSilhouette
+      <HeroVisual
+        src="/images/hero/hero-executive-mercedes.jpg"
         className={`pointer-events-none absolute -right-24 bottom-0 hidden w-[900px] max-w-none opacity-70 lg:block ${
           shouldReduceMotion ? "" : "animate-float"
         }`}

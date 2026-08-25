@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { EyeOff, Timer, PlaneLanding, Handshake } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import RevealSection from "./RevealSection";
@@ -9,9 +11,23 @@ const ICONS = [EyeOff, Timer, PlaneLanding, Handshake];
 
 export default function About() {
   const { t } = useLanguage();
+  const [imageFailed, setImageFailed] = useState(false);
 
   return (
     <section id="about" className="relative overflow-hidden bg-obsidian py-24">
+      {!imageFailed && (
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <Image
+            src="/images/about/about-atmosphere.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-25"
+            onError={() => setImageFailed(true)}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian via-obsidian/85 to-obsidian" />
+        </div>
+      )}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-gold/5 blur-[120px]" />
 
       <div className="section-container relative">

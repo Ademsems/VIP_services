@@ -35,17 +35,15 @@ export default function Fleet() {
         </RevealSection>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:items-start">
-          <RevealSection direction="left" className="lg:col-span-2">
+          <RevealSection direction="left" className="space-y-6 lg:col-span-2">
             <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
-              <div className="relative">
-                <LuxuryImagePlaceholder
-                  alt={t.fleet.vehicleName}
-                  icon={Car}
-                  label={t.fleet.vehicleClass}
-                  className="aspect-[4/3] w-full"
-                />
-                <CabinHotspots />
-              </div>
+              <LuxuryImagePlaceholder
+                src="/images/fleet/vehicle-exterior.jpg"
+                alt={t.fleet.vehicleName}
+                icon={Car}
+                label={t.fleet.vehicleClass}
+                className="aspect-[4/3] w-full"
+              />
               <div className="p-6">
                 <div className="mb-3">
                   <LuxuryBadge label="Executive Class" />
@@ -67,6 +65,19 @@ export default function Fleet() {
                     {t.fleet.luggage}
                   </span>
                 </div>
+              </div>
+            </div>
+
+            <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
+              <div className="relative">
+                <LuxuryImagePlaceholder
+                  src="/images/fleet/vehicle-interior.jpg"
+                  alt={`${t.fleet.vehicleName} — ${t.fleet.interiorLabel}`}
+                  icon={Armchair}
+                  label={t.fleet.interiorLabel}
+                  className="aspect-[4/3] w-full"
+                />
+                <CabinHotspots />
               </div>
             </div>
           </RevealSection>
