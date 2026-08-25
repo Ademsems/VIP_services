@@ -30,7 +30,7 @@ export default function HeroVisual({ srcBase, className = "" }: HeroVisualProps)
   if (showImage) {
     const currentSrc = candidateSrc(srcBase as string, extensionIndex);
     return (
-      <div className={`${className} relative aspect-[900/320]`}>
+      <div className={`${className} aspect-[900/320]`}>
         <Image
           key={currentSrc}
           src={currentSrc}
