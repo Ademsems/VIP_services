@@ -1,16 +1,27 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, Phone, MessageCircle, ShieldCheck, Clock, PlaneTakeoff } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
 import MouseSpotlight from "./MouseSpotlight";
-import HeroVisual from "./HeroVisual";
 import LuxuryBadge from "./LuxuryBadge";
 
 export default function Hero() {
   const { t } = useLanguage();
   const shouldReduceMotion = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (shouldReduceMotion) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [shouldReduceMotion]);
 
   const scrollTo = (href: string) =>
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
@@ -26,17 +37,27 @@ export default function Hero() {
       id="home"
       className="relative flex min-h-screen items-center overflow-hidden bg-obsidian pt-20"
     >
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          src="/images/hero/hero.mp4"
+          poster="/images/hero/hero-executive-mercedes.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/85 to-obsidian/40" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-obsidian/60" />
+
       <MouseSpotlight />
-      <div className="pointer-events-none absolute inset-0 bg-mesh-gold" />
+      <div className="pointer-events-none absolute inset-0 bg-mesh-gold opacity-40" />
       <div className="pointer-events-none absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-gold/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]" />
-
-      <HeroVisual
-        srcBase="/images/hero/hero-executive-mercedes"
-        className={`pointer-events-none absolute -right-24 bottom-0 hidden w-[900px] max-w-none opacity-70 lg:block ${
-          shouldReduceMotion ? "" : "animate-float"
-        }`}
-      />
 
       <div className="section-container relative py-24">
         <motion.div
