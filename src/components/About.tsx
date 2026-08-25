@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { EyeOff, Timer, PlaneLanding, Handshake } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import RevealSection from "./RevealSection";
+import TiltCard from "./TiltCard";
 
 const ICONS = [EyeOff, Timer, PlaneLanding, Handshake];
 
@@ -34,11 +34,7 @@ export default function About() {
                 direction={idx % 2 === 0 ? "left" : "right"}
                 delay={idx * 0.06}
               >
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  className="glass-panel h-full rounded-2xl p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
-                >
+                <TiltCard className="glass-deep h-full rounded-2xl p-6">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
                     <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />
                   </div>
@@ -48,7 +44,7 @@ export default function About() {
                   <p className="mt-2 text-sm leading-relaxed text-slate-body">
                     {pillar.description}
                   </p>
-                </motion.div>
+                </TiltCard>
               </RevealSection>
             );
           })}

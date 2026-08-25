@@ -35,7 +35,13 @@ src/
 │   ├── Footer.tsx                   #footer — company info, quick links, contact, legal notice
 │   ├── FloatingWhatsApp.tsx          Fixed bottom-right pulsing WhatsApp quick-dispatch button
 │   ├── LuxuryImagePlaceholder.tsx    Reusable image + CSS/SVG fallback (see below)
-│   └── RevealSection.tsx             Shared scroll-entrance wrapper (framer-motion)
+│   ├── RevealSection.tsx             Shared scroll-entrance wrapper (framer-motion)
+│   ├── TiltCard.tsx                  Pointer-driven 3D tilt wrapper (see Immersive UI below)
+│   ├── MouseSpotlight.tsx            Cursor-tracking ambient radial glow, used in Hero
+│   ├── CarSilhouette.tsx             Inline-SVG cinematic sedan silhouette, used in Hero
+│   ├── LuxuryBadge.tsx               Glowing metallic-gold pill tag ("Executive Class", ...)
+│   ├── CabinHotspots.tsx             Interactive feature hotspots over the Fleet vehicle image
+│   └── GrainOverlay.tsx              Fixed, site-wide film-grain texture (static, no motion)
 ├── context/
 │   └── LanguageContext.tsx    React context: locale state, localStorage persistence,
 │                              browser-language auto-detect on first load
@@ -69,12 +75,17 @@ Defined in `tailwind.config.ts` (`theme.extend`):
 
 Custom utilities: `bg-gold-gradient` (135° gold sweep, used on primary CTAs),
 `bg-mesh-gold` (radial gold glow, used behind Hero/About), `shadow-gold` /
-`shadow-gold-lg` (soft gold glow shadows), `.text-gradient-gold` (gold gradient text
-clip, used for price figures and logo mark), `.glass-panel` (frosted-glass card treatment:
-`border-border/80` + `bg-surface/80` + `backdrop-blur-md` — the default surface for every
-card/panel on the site, replacing flat `bg-surface`), `.focus-gold` (consistent keyboard
-focus ring: `focus-visible:ring-2 ring-gold ring-offset-2 ring-offset-obsidian`, applied to
-every interactive element site-wide).
+`shadow-gold-lg` (soft gold glow shadows), `.text-gradient-gold` (metallic gold gradient
+text clip — `#FDE68A → #FACC15 → #D97706`, used for the Hero headline, price figures, and
+badge text), `.glass-panel` (frosted-glass card treatment: `border-border/80` +
+`bg-surface/80` + `backdrop-blur-md` — the standard surface for static cards), `.glass-deep`
+(a moodier variant — `bg-gradient-to-b from-[#141721]/80 to-[#0A0C10]/90` +
+`border-white/[0.08]` + `backdrop-blur-xl` — used specifically inside `TiltCard` for the
+flagship 3D-hover cards), `.glow-gold-hover` (adds the gold border-beam +
+`shadow-[0_0_30px_rgba(212,175,55,0.15)]` glow on `:hover`, applied by `TiltCard`),
+`.focus-gold` (consistent keyboard focus ring: `focus-visible:ring-2 ring-gold
+ring-offset-2 ring-offset-obsidian`, applied to every interactive element site-wide),
+`.grain-overlay` (SVG `feTurbulence` noise texture, tiled, used by `GrainOverlay`).
 
 Fonts: `Playfair Display` (`font-display`, headings) + `Inter` (`font-sans`, body),
 loaded via `next/font/google` in `layout.tsx` and exposed as CSS vars
@@ -222,6 +233,62 @@ vehicle rather than a fleet to choose from (see Vehicle Showcase below).
   `GlassWater`), alternating scroll-reveal directions and `whileHover={{ y: -6 }}` lift.
 - To add a second vehicle in the future, `t.fleet` would need to change from a single
   object back to an array (as in the original multi-vehicle draft) — this is a deliberate,
+  documented trade-off, not an oversight.
+
+## Immersive UI Layer
+
+A set of small, composable components lift the site from flat cards to a layered, cinematic
+feel. All of them are reduced-motion-safe and add zero external asset dependencies (in
+keeping with the Image Fallback Strategy's "zero broken builds" guarantee — no Unsplash/CDN
+photography is used anywhere on the site).
+
+- **`TiltCard.tsx`**: wraps card content in a pointer-driven 3D tilt. `useMotionValue` +
+  `useSpring` track the cursor position within the card's bounding box on `onMouseMove`,
+  mapped via `useTransform` to `rotateX`/`rotateY` (±10° by default, `maxTilt` prop to
+  override — Routes cards use `6°` for a subtler effect on wide cards), plus
+  `whileHover={{ scale: 1.02 }}` and the `.glow-gold-hover` border-beam glow. Under
+  `useReducedMotion()`, the rotation transform is skipped entirely (no `style` override is
+  applied) — only the scale/glow still respond to hover. Used by the Fleet amenity cards,
+  Routes corridor cards, and About trust pillars (all now render on `.glass-deep` instead
+  of `.glass-panel`).
+- **`MouseSpotlight.tsx`**: an absolutely-positioned, `pointer-events-none` radial gradient
+  layered into the Hero background. A `window` `mousemove` listener updates spring-smoothed
+  motion values, converted to `%` position via `useTransform` and composed into a
+  `radial-gradient(...)` string with `useMotionTemplate` (values must be passed as motion
+  values, not `.get()` snapshots, to stay reactive — a mistake to watch for when extending
+  this). Under `useReducedMotion()`, no listener is attached; a static centered glow renders
+  instead — the atmosphere stays, only the tracking is removed.
+- **`CarSilhouette.tsx`**: a hand-built inline SVG side-profile luxury sedan (gradient body
+  fill, gold rim-light stroke along the roofline/beltline, wheel glow) — the "cinematic dark
+  silhouette" the Hero background calls for, without relying on any external photography
+  that could fail to load. Rendered large and mostly off-canvas to the right in Hero
+  (`lg:` breakpoint and up only), with the existing `animate-float` keyframe (guarded by
+  `motion-reduce:animate-none` via a conditional class, since `useReducedMotion()` is
+  already read in `Hero.tsx` for the scroll-hint chevron).
+- **`LuxuryBadge.tsx`**: small glowing pill tags (gold border, `.text-gradient-gold` label,
+  soft `shadow-[0_0_20px_rgba(212,175,55,0.12)]`). Used in the Hero ("Executive Class",
+  "24/7 Private Dispatch", "Flight Tracked") and above the vehicle name in Fleet
+  ("Executive Class"). **Design decision**: badge labels are kept in English across all
+  three locales — the same treatment as the "VIP SERVICE" wordmark — rather than added to
+  the `Messages` schema, since these read as brand marks rather than translatable UI copy.
+- **`CabinHotspots.tsx`**: an overlay of four positioned hotspot buttons on the Fleet
+  vehicle image ("Nappa Leather", "Acoustic Glass", "Climate Control", "High-Speed Wi-Fi" —
+  same English-brand-mark decision as `LuxuryBadge`). Each hotspot is a real `<button>`
+  (keyboard-focusable, `aria-label` includes both the label and description, `aria-expanded`
+  reflects popover state) that opens a `.glass-deep` detail popover on hover, focus, *or*
+  tap/click — click-to-toggle is the touch-device fallback since hover alone isn't
+  reachable there. The pulsing ring cue carries `motion-reduce:animate-none`; the popover's
+  Framer Motion enter/exit is duration-reduced (not skipped) under `useReducedMotion()` so
+  screen readers relying on visible state changes still get one.
+- **`GrainOverlay.tsx`**: a single `fixed inset-0` div with the `.grain-overlay` SVG
+  noise texture, `opacity-20`, `mix-blend-overlay`, `pointer-events-none`, mounted once in
+  `layout.tsx` above `<LanguageProvider>` so it covers the whole site rather than just Hero.
+  Purely static (no animation), so it needs no reduced-motion guard.
+- **Hero headline**: now rendered with `.text-gradient-gold` (metallic gold clip) instead of
+  plain white, per the "high-end luxury typography" brief. Section `<h2>` headings elsewhere
+  on the site were deliberately **left white** rather than also gold-clipped — full-page
+  gold text would fight the existing gold-restraint principle (gold reserved for accents,
+  prices, and the flagship headline) and reduce scan-ability across five sections. This is a
   documented trade-off, not an oversight.
 
 ## Verification

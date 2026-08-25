@@ -4,6 +4,9 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, Phone, MessageCircle, ShieldCheck, Clock, PlaneTakeoff } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
+import MouseSpotlight from "./MouseSpotlight";
+import CarSilhouette from "./CarSilhouette";
+import LuxuryBadge from "./LuxuryBadge";
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -23,25 +26,45 @@ export default function Hero() {
       id="home"
       className="relative flex min-h-screen items-center overflow-hidden bg-obsidian pt-20"
     >
+      <MouseSpotlight />
       <div className="pointer-events-none absolute inset-0 bg-mesh-gold" />
       <div className="pointer-events-none absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-gold/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]" />
 
+      <CarSilhouette
+        className={`pointer-events-none absolute -right-24 bottom-0 hidden w-[900px] max-w-none opacity-70 lg:block ${
+          shouldReduceMotion ? "" : "animate-float"
+        }`}
+      />
+
       <div className="section-container relative py-24">
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-gold"
+          className="mb-6 flex flex-wrap items-center gap-3"
         >
-          {t.hero.eyebrow}
-        </motion.p>
+          <span className="text-sm font-medium uppercase tracking-[0.3em] text-gold">
+            {t.hero.eyebrow}
+          </span>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.05 }}
+          className="mb-6 flex flex-wrap gap-2"
+        >
+          <LuxuryBadge label="Executive Class" />
+          <LuxuryBadge label="24/7 Private Dispatch" />
+          <LuxuryBadge label="Flight Tracked" />
+        </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="max-w-4xl text-balance font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
+          className="max-w-4xl text-balance font-display text-4xl font-semibold leading-tight text-gradient-gold sm:text-5xl lg:text-6xl"
         >
           {t.hero.headline}
         </motion.h1>

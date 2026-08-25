@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { SITE_CONFIG } from "@/lib/config";
+import GrainOverlay from "@/components/GrainOverlay";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -132,6 +133,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <GrainOverlay />
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

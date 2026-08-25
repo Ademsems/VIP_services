@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowRight, Clock3 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import RevealSection from "./RevealSection";
+import TiltCard from "./TiltCard";
 
 export default function Routes() {
   const { t } = useLanguage();
@@ -28,10 +28,9 @@ export default function Routes() {
               direction={idx % 2 === 0 ? "left" : "right"}
               delay={idx * 0.06}
             >
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="glass-panel flex items-center justify-between rounded-2xl p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
+              <TiltCard
+                maxTilt={6}
+                className="glass-deep flex items-center justify-between rounded-2xl p-6"
               >
                 <div>
                   <div className="flex items-center gap-2 text-base font-semibold text-white">
@@ -47,7 +46,7 @@ export default function Routes() {
                 <div className="font-display text-xl font-semibold tabular-nums text-gradient-gold">
                   {item.price}
                 </div>
-              </motion.div>
+              </TiltCard>
             </RevealSection>
           ))}
         </div>

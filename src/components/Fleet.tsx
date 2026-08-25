@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Users,
   Briefcase,
@@ -13,6 +12,9 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import LuxuryImagePlaceholder from "./LuxuryImagePlaceholder";
 import RevealSection from "./RevealSection";
+import TiltCard from "./TiltCard";
+import CabinHotspots from "./CabinHotspots";
+import LuxuryBadge from "./LuxuryBadge";
 
 const AMENITY_ICONS = [Car, Armchair, Wifi, Briefcase, Snowflake, GlassWater];
 
@@ -35,13 +37,19 @@ export default function Fleet() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:items-start">
           <RevealSection direction="left" className="lg:col-span-2">
             <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
-              <LuxuryImagePlaceholder
-                alt={t.fleet.vehicleName}
-                icon={Car}
-                label={t.fleet.vehicleClass}
-                className="aspect-[4/3] w-full"
-              />
+              <div className="relative">
+                <LuxuryImagePlaceholder
+                  alt={t.fleet.vehicleName}
+                  icon={Car}
+                  label={t.fleet.vehicleClass}
+                  className="aspect-[4/3] w-full"
+                />
+                <CabinHotspots />
+              </div>
               <div className="p-6">
+                <div className="mb-3">
+                  <LuxuryBadge label="Executive Class" />
+                </div>
                 <h3 className="font-display text-xl font-semibold text-white">
                   {t.fleet.vehicleName}
                 </h3>
@@ -72,11 +80,7 @@ export default function Fleet() {
                   direction="right"
                   delay={idx * 0.06}
                 >
-                  <motion.div
-                    whileHover={{ y: -6 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="glass-panel h-full rounded-2xl p-6 transition-colors duration-300 hover:border-gold/40 hover:shadow-gold"
-                  >
+                  <TiltCard className="glass-deep h-full rounded-2xl p-6">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/30 bg-gold/5">
                       <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />
                     </div>
@@ -86,7 +90,7 @@ export default function Fleet() {
                     <p className="mt-2 text-sm leading-relaxed text-slate-body">
                       {amenity.description}
                     </p>
-                  </motion.div>
+                  </TiltCard>
                 </RevealSection>
               );
             })}

@@ -22,7 +22,7 @@ body {
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, #d4af37 0%, #f4e5b2 50%, #c5a059 100%);
+    background: linear-gradient(90deg, #fde68a 0%, #facc15 50%, #d97706 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -37,9 +37,30 @@ body {
     @apply border border-border/80 bg-surface/80 backdrop-blur-md;
   }
 
+  /* Deeper frosted panel with directional tint — used by TiltCard for the flagship
+     3D-hover cards (Fleet amenities, Routes, About pillars) */
+  .glass-deep {
+    @apply border border-white/[0.08] bg-gradient-to-b from-[#141721]/80 to-[#0A0C10]/90 backdrop-blur-xl;
+  }
+
   /* Consistent gold focus ring for keyboard navigation across all interactive elements */
   .focus-gold {
     @apply outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian;
+  }
+
+  /* Gold border-beam glow for 3D tilt card hover state */
+  .glow-gold-hover {
+    @apply transition-[box-shadow,border-color] duration-300;
+  }
+  .glow-gold-hover:hover {
+    @apply border-amber-400/40;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+
+  /* Subtle film-grain texture — layered once, fixed, behind all content */
+  .grain-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
   }
 }
 
