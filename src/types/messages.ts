@@ -20,6 +20,13 @@ export interface Messages {
     trust2: string;
     trust3: string;
     scrollHint: string;
+    metrics: {
+      target: number;
+      decimals: number;
+      prefix: string;
+      suffix: string;
+      label: string;
+    }[];
   };
   booking: {
     title: string;
@@ -61,6 +68,7 @@ export interface Messages {
       from: string;
       to: string;
       duration: string;
+      distanceKm: string;
       price: string;
     }[];
     priceNote: string;

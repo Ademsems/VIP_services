@@ -126,9 +126,9 @@ export default function Navbar() {
 
           <button
             onClick={() => handleNavClick("#booking")}
-            className="focus-gold hidden cursor-pointer rounded-full bg-gold-gradient px-5 py-2.5 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 active:scale-95 sm:block"
+            className="gold-sheen focus-gold hidden cursor-pointer rounded-full bg-gold-gradient px-5 py-2.5 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 active:scale-95 sm:block"
           >
-            {t.nav.bookTransfer}
+            <span className="relative z-10">{t.nav.bookTransfer}</span>
           </button>
 
           <button

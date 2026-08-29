@@ -49,6 +49,10 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-12px)" },
         },
+        dash: {
+          "0%": { strokeDashoffset: "32" },
+          "100%": { strokeDashoffset: "0" },
+        },
       },
     },
   },

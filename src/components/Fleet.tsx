@@ -36,7 +36,7 @@ export default function Fleet() {
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:items-start">
           <RevealSection direction="left" className="space-y-6 lg:col-span-2">
-            <div className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
+            <TiltCard maxTilt={4} className="glass-panel overflow-hidden rounded-2xl shadow-gold-lg">
               <LuxuryImagePlaceholder
                 srcBase="/images/fleet/vehicle-exterior"
                 alt={t.fleet.vehicleName}
@@ -66,9 +66,9 @@ export default function Fleet() {
                   </span>
                 </div>
               </div>
-            </div>
+            </TiltCard>
 
-            <div className="glass-panel rounded-2xl shadow-gold-lg">
+            <TiltCard maxTilt={4} className="glass-panel rounded-2xl shadow-gold-lg">
               <div className="relative">
                 <LuxuryImagePlaceholder
                   srcBase="/images/fleet/vehicle-interior"
@@ -79,7 +79,7 @@ export default function Fleet() {
                 />
                 <CabinHotspots />
               </div>
-            </div>
+            </TiltCard>
           </RevealSection>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-3">

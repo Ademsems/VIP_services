@@ -57,6 +57,30 @@ body {
     box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
   }
 
+  /* Metallic gold sheen sweep for primary CTAs — a diagonal highlight that
+     slides across the button on hover. transition-duration is clamped to
+     0.01ms globally under prefers-reduced-motion, so this degrades to an
+     instant (imperceptible) sweep rather than needing its own guard. */
+  .gold-sheen {
+    @apply relative overflow-hidden;
+  }
+  .gold-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+  }
+  .gold-sheen:hover::after {
+    transform: translateX(120%);
+  }
+
   /* Subtle film-grain texture — layered once, fixed, behind all content */
   .grain-overlay {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");

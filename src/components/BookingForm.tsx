@@ -171,10 +171,12 @@ export default function BookingForm() {
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="focus-gold mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-[1.02] active:scale-95"
+              className="gold-sheen focus-gold mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-[1.02] active:scale-95"
             >
-              <MessageCircle className="h-4 w-4" />
-              {t.booking.submit}
+              <span className="relative z-10 flex items-center gap-2">
+                <MessageCircle className="h-4 w-4" />
+                {t.booking.submit}
+              </span>
             </a>
             <p className="mt-4 text-center text-xs text-slate-body">
               {t.booking.disclaimer}

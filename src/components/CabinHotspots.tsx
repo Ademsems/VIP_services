@@ -10,6 +10,8 @@ interface Hotspot {
   label: string;
   description: string;
   popoverPosition: "top" | "bottom";
+  /** HUD-style spec rating (0-100) shown as a gauge bar in the popover. */
+  gauge: number;
 }
 
 /**
@@ -29,6 +31,7 @@ const HOTSPOTS: Hotspot[] = [
     label: "Nappa Leather",
     description: "Hand-finished full-grain leather throughout the cabin.",
     popoverPosition: "bottom",
+    gauge: 98,
   },
   {
     x: "50%",
@@ -36,6 +39,7 @@ const HOTSPOTS: Hotspot[] = [
     label: "Acoustic Glass",
     description: "Laminated glazing cancels road and wind noise.",
     popoverPosition: "bottom",
+    gauge: 95,
   },
   {
     x: "72%",
@@ -43,6 +47,7 @@ const HOTSPOTS: Hotspot[] = [
     label: "Climate Control",
     description: "Independent zones keep every passenger comfortable.",
     popoverPosition: "bottom",
+    gauge: 100,
   },
   {
     x: "40%",
@@ -50,6 +55,7 @@ const HOTSPOTS: Hotspot[] = [
     label: "High-Speed Wi-Fi",
     description: "Stay connected with onboard broadband and charging.",
     popoverPosition: "top",
+    gauge: 92,
   },
 ];
 
@@ -109,6 +115,15 @@ export default function CabinHotspots() {
                 </p>
                 <p className="mt-1 text-xs leading-relaxed text-slate-body">
                   {hotspot.description}
+                </p>
+                <div className="mt-2.5 h-1 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full bg-gold-gradient"
+                    style={{ width: `${hotspot.gauge}%` }}
+                  />
+                </div>
+                <p className="mt-1 text-right text-[10px] font-medium tabular-nums text-gold/80">
+                  {hotspot.gauge}%
                 </p>
               </motion.div>
             )}

@@ -1,10 +1,11 @@
 "use client";
 
-import { ArrowRight, Clock3, MapPin } from "lucide-react";
+import { ArrowRight, Clock3, MapPin, Route as RouteIcon } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import RevealSection from "./RevealSection";
 import TiltCard from "./TiltCard";
 import LuxuryImagePlaceholder from "./LuxuryImagePlaceholder";
+import RoutePathSVG from "./RoutePathSVG";
 
 /** Indexed to match t.routes.items order: Vienna Airport, Vienna City, Budapest, Prague. */
 const ROUTE_IMAGES = [
@@ -16,6 +17,9 @@ const ROUTE_IMAGES = [
 
 export default function Routes() {
   const { t } = useLanguage();
+
+  const scrollToBooking = () =>
+    document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <section id="routes" className="relative bg-obsidian py-24">
@@ -39,7 +43,7 @@ export default function Routes() {
             >
               <TiltCard
                 maxTilt={6}
-                className="glass-deep flex items-center justify-between rounded-2xl p-6"
+                className="glass-deep group flex flex-col gap-5 rounded-2xl p-6 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-center gap-4">
                   <LuxuryImagePlaceholder
@@ -54,15 +58,26 @@ export default function Routes() {
                       <ArrowRight className="h-4 w-4 text-gold" />
                       <span>{item.to}</span>
                     </div>
-                    <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-body">
-                      <Clock3 className="h-3.5 w-3.5" />
-                      {item.duration}
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-body">
+                      <span className="flex items-center gap-1.5">
+                        <Clock3 className="h-3.5 w-3.5" />
+                        {item.duration}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <RouteIcon className="h-3.5 w-3.5" />
+                        {item.distanceKm}
+                      </span>
                     </div>
+                    <RoutePathSVG />
                   </div>
                 </div>
-                <div className="font-display text-xl font-semibold tabular-nums text-gradient-gold">
+                <button
+                  type="button"
+                  onClick={scrollToBooking}
+                  className="focus-gold cursor-pointer self-start rounded-full border border-gold/30 bg-gold/5 px-4 py-2 font-display text-lg font-semibold tabular-nums text-gradient-gold transition-all duration-200 hover:scale-105 hover:border-gold/60 hover:bg-gold/10 active:scale-95 sm:self-auto"
+                >
                   {item.price}
-                </div>
+                </button>
               </TiltCard>
             </RevealSection>
           ))}

@@ -24,7 +24,8 @@ src/
 ├── components/
 │   ├── Navbar.tsx              Floating blur header, smooth-scroll nav, language switcher,
 │   │                          gold "Book Transfer" CTA, mobile drawer
-│   ├── Hero.tsx                 #home — headline, trust markers, dual CTA, phone/WhatsApp chips
+│   ├── Hero.tsx                 #home — looping background video, headline, trust markers,
+│   │                          animated telemetry stats, dual CTA, phone/WhatsApp chips
 │   ├── Fleet.tsx                 #fleet — single-vehicle showcase: exterior + interior
 │   │                          image cards, spec sheet, and a 6-item onboard-amenities grid
 │   ├── Routes.tsx                #routes — fixed-rate corridor cards with destination thumbnails
@@ -35,9 +36,10 @@ src/
 │   ├── Footer.tsx                   #footer — company info, quick links, contact, legal notice
 │   ├── FloatingWhatsApp.tsx          Fixed bottom-right pulsing WhatsApp quick-dispatch button
 │   ├── LuxuryImagePlaceholder.tsx    Reusable image + CSS/SVG fallback (see below)
-│   ├── HeroVisual.tsx                Hero-specific image + CarSilhouette fallback (see below)
 │   ├── RevealSection.tsx             Shared scroll-entrance wrapper (framer-motion)
 │   ├── TiltCard.tsx                  Pointer-driven 3D tilt wrapper (see Immersive UI below)
+│   ├── MetricCounter.tsx             Scroll-triggered count-up number (see Telemetry below)
+│   ├── RoutePathSVG.tsx              Mini corridor-line SVG with hover pulse (Routes cards)
 │   ├── MouseSpotlight.tsx            Cursor-tracking ambient radial glow, used in Hero
 │   ├── CarSilhouette.tsx             Inline-SVG cinematic sedan silhouette, used in Hero
 │   ├── LuxuryBadge.tsx               Glowing metallic-gold pill tag ("Executive Class", ...)
@@ -211,10 +213,6 @@ format candidate fails. Never a broken image icon, never a build failure.
   omitted), it renders a `bg-mesh-gold` gradient panel, an animated shimmer sweep
   (`animate-shimmer`, `motion-reduce:animate-none` guarded), a centered Lucide icon in a
   gold-ringed circle, and an optional uppercase label.
-- **`HeroVisual`** (`src/components/HeroVisual.tsx`): the same contract, adapted for Hero's
-  borderless, absolutely-positioned placement. Falls back to the hand-drawn `CarSilhouette`
-  SVG (not a generic icon) instead — the "cinematic silhouette" *is* the fallback for the
-  hero photo, not a separate concept.
 - **`About.tsx`**'s atmospheric backdrop is a one-off `next/image` + local extension-cycling
   `useState` (not worth its own component for a single full-bleed usage) — once exhausted it
   simply doesn't render, leaving the existing `bg-gold/5 blur` glow as the backdrop.
@@ -229,7 +227,7 @@ exactly like a broken remote URL would.
 
 | Base path (any of `.webp`/`.avif`/`.jpg`/`.jpeg`/`.png`) | Used by | Aspect | Suggested dimensions | Files currently in `public/` |
 |---|---|---|---|---|
-| `public/images/hero/hero-executive-mercedes` | `Hero.tsx` → `HeroVisual` | 900:320 (~2.8:1) | ~2400 × 1350 | `.jpg` (1376 × 768) |
+| `public/images/hero/hero-executive-mercedes` | `Hero.tsx` `<video poster>` (still frame shown before the video decodes, and if it 404s) | 900:320 (~2.8:1) | ~2400 × 1350 | `.webp` |
 | `public/images/fleet/vehicle-exterior` | `Fleet.tsx` exterior card | 4:3 | ~1600 × 1200 | `.jpg` (1600 × 1066) |
 | `public/images/fleet/vehicle-interior` | `Fleet.tsx` interior card (carries `CabinHotspots`) | 4:3 | ~1600 × 1200 | `.jpg` (1200 × 896) |
 | `public/images/routes/route-vienna-airport` | `Routes.tsx` item 0 | 1:1 | ~400 × 400 | `.jpg` (400 × 400) |
@@ -318,13 +316,24 @@ photography is used anywhere on the site).
   values, not `.get()` snapshots, to stay reactive — a mistake to watch for when extending
   this). Under `useReducedMotion()`, no listener is attached; a static centered glow renders
   instead — the atmosphere stays, only the tracking is removed.
-- **`CarSilhouette.tsx`**: a hand-built inline SVG side-profile luxury sedan (gradient body
-  fill, gold rim-light stroke along the roofline/beltline, wheel glow) — the "cinematic dark
-  silhouette" the Hero background calls for, without relying on any external photography
-  that could fail to load. Rendered large and mostly off-canvas to the right in Hero
-  (`lg:` breakpoint and up only), with the existing `animate-float` keyframe (guarded by
-  `motion-reduce:animate-none` via a conditional class, since `useReducedMotion()` is
-  already read in `Hero.tsx` for the scroll-hint chevron).
+- **Hero background video**: `Hero.tsx` renders a full-bleed `<video autoPlay muted loop
+  playsInline>` (`public/images/hero/hero.mp4`) behind the content, with `poster` set to the
+  static `hero-executive-mercedes` image so there's a real frame visible before the video
+  decodes. A `videoFailed` state (set by the video's `onError`) unmounts the `<video>`
+  entirely if the file 404s, falling back to the `bg-mesh-gold` gradient + ambient glow blobs
+  that already render underneath — no broken video icon, no code change needed to swap the
+  clip. Two stacked gradient overlays (`bg-gradient-to-r` left-heavy, `bg-gradient-to-t`
+  bottom-heavy) darken the footage exactly where the headline/CTAs and the trust-marker row
+  sit, so text stays legible without a blur pass dulling the footage. A `useEffect` pauses
+  the video on its poster frame under `useReducedMotion()` instead of autoplaying.
+- **`.gold-sheen`** (`globals.css`): a reusable utility for primary CTAs — a diagonal
+  highlight (`::after`, `linear-gradient` diagonal band) that sweeps from off-canvas-left to
+  off-canvas-right on `:hover` via a `transform: translateX` transition. Needs `relative
+  overflow-hidden` on the button (which the class provides) and the button's text wrapped in
+  a `<span className="relative z-10">` so it renders above the sweep. Applied to the Hero
+  primary CTA, the Navbar "Book Transfer" button, and the BookingForm submit button. No
+  reduced-motion guard needed — the global `transition-duration: 0.01ms` fallback in
+  `globals.css` already clamps it to an instant, imperceptible sweep.
 - **`LuxuryBadge.tsx`**: small glowing pill tags (gold border, `.text-gradient-gold` label,
   soft `shadow-[0_0_20px_rgba(212,175,55,0.12)]`). Used in the Hero ("Executive Class",
   "24/7 Private Dispatch", "Flight Tracked") and above the vehicle name in Fleet
@@ -356,6 +365,42 @@ photography is used anywhere on the site).
   gold text would fight the existing gold-restraint principle (gold reserved for accents,
   prices, and the flagship headline) and reduce scan-ability across five sections. This is a
   documented trade-off, not an oversight.
+
+## Telemetry, Metrics & Cabin HUD
+
+A small set of data-flavored components reinforce the "cinematic, high-tech" brief beyond
+pure visual polish — animated numbers and route/cabin spec readouts styled like a HUD.
+
+- **`MetricCounter.tsx`**: scroll-triggered count-up. Uses Framer Motion's `useInView`
+  (`once: true, margin: "-80px"`) to trigger a `requestAnimationFrame` loop that eases
+  (cubic-out) from `0` to a `target` prop over `duration` seconds (default `1.6`), formatted
+  with `decimals`/`prefix`/`suffix` props and `tabular-nums` so digit width doesn't jitter
+  mid-count. Under `useReducedMotion()` it jumps straight to `target` — no animation loop
+  runs at all. Driven by `t.hero.metrics` (`Messages["hero"]["metrics"]`, an array of
+  `{ target, decimals, prefix, suffix, label }`): the three stats named in the brief —
+  `99.8%` On-Time Punctuality, `24/7` VIP Dispatch, `€0` Flight Delay Surcharge — rendered in
+  a new stat row in `Hero.tsx` below the existing trust-marker row. The `24/7` and `€0`
+  entries still animate (counting 0→24 and staying at 0 respectively) for rhythm consistency
+  with the punctuality counter, even though the numeric motion is minimal/absent for those two.
+- **Route corridor telemetry** (`Routes.tsx`): each corridor card now shows the existing
+  duration alongside a `distanceKm` figure (`Messages["routes"]["items"][n]["distanceKm"]`,
+  e.g. `"60 km"`) using a `Route` (lucide) icon, plus a `RoutePathSVG` mini corridor-line
+  underneath. The fixed-rate price is rendered as an interactive pill `<button>` (gold border/
+  bg-tint, `hover:scale-105`) that scrolls to `#booking` on click rather than a static price
+  label.
+- **`RoutePathSVG.tsx`**: a small decorative `viewBox="0 0 120 24"` SVG — a faint static
+  curve plus a gold dashed overlay that's `opacity-0` by default and animates
+  (`group-hover:[animation:dash_1.4s_linear_infinite]`, using the `dash` keyframe added to
+  `tailwind.config.ts` — animates `strokeDashoffset`) when the parent `TiltCard` (which
+  carries `group`) is hovered, reading as a pulse traveling along the corridor line.
+- **Cabin HUD gauges** (`CabinHotspots.tsx`): each hotspot now carries a `gauge: number`
+  (0–100) field alongside its label/description. The popover renders a thin horizontal bar
+  (`bg-gold-gradient` fill, width set inline from `gauge`) plus the numeric `gauge%` — a
+  HUD-style spec readout rather than plain text, e.g. Nappa Leather 98%, Climate Control 100%.
+- **3D tilt on the vehicle showcase**: the Fleet exterior and interior vehicle cards (not
+  just the amenity cards) are now wrapped in `TiltCard` (`maxTilt={4}`, gentler than the
+  amenity cards' default since these are larger panels) — the "Cabin Experience" module gets
+  the same pointer-driven tilt physics as the rest of the site's primary interactive cards.
 
 ## Verification
 

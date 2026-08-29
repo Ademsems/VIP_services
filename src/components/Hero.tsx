@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, Phone, MessageCircle, ShieldCheck, Clock, PlaneTakeoff } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buildTelLink, DIRECT_WHATSAPP_LINK, SITE_CONFIG } from "@/lib/config";
 import MouseSpotlight from "./MouseSpotlight";
 import LuxuryBadge from "./LuxuryBadge";
+import MetricCounter from "./MetricCounter";
 
 export default function Hero() {
   const { t } = useLanguage();
   const shouldReduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -37,20 +39,23 @@ export default function Hero() {
       id="home"
       className="relative flex min-h-screen items-center overflow-hidden bg-obsidian pt-20"
     >
-      <div className="absolute inset-0 overflow-hidden">
-        <video
-          ref={videoRef}
-          className="h-full w-full object-cover"
-          src="/images/hero/hero.mp4"
-          poster="/images/hero/hero-executive-mercedes.webp"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden
-        />
-      </div>
+      {!videoFailed && (
+        <div className="absolute inset-0 overflow-hidden">
+          <video
+            ref={videoRef}
+            className="h-full w-full object-cover"
+            src="/images/hero/hero.mp4"
+            poster="/images/hero/hero-executive-mercedes.webp"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden
+            onError={() => setVideoFailed(true)}
+          />
+        </div>
+      )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/85 to-obsidian/40" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-obsidian/60" />
 
@@ -108,9 +113,9 @@ export default function Hero() {
         >
           <button
             onClick={() => scrollTo("#booking")}
-            className="focus-gold cursor-pointer rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 active:scale-95"
+            className="gold-sheen focus-gold cursor-pointer rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-obsidian shadow-gold transition-transform duration-200 hover:scale-105 active:scale-95"
           >
-            {t.hero.ctaPrimary}
+            <span className="relative z-10">{t.hero.ctaPrimary}</span>
           </button>
           <button
             onClick={() => scrollTo("#fleet")}
@@ -156,6 +161,29 @@ export default function Hero() {
                 <Icon className="h-5 w-5 text-gold" strokeWidth={1.5} />
               </div>
               <span className="text-sm font-medium text-white">{label}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+          className="mt-8 grid grid-cols-3 gap-4 border-t border-border pt-8"
+        >
+          {t.hero.metrics.map((metric) => (
+            <div key={metric.label}>
+              <div className="font-display text-2xl font-semibold text-gradient-gold sm:text-3xl">
+                <MetricCounter
+                  target={metric.target}
+                  decimals={metric.decimals}
+                  prefix={metric.prefix}
+                  suffix={metric.suffix}
+                />
+              </div>
+              <p className="mt-1 text-[11px] uppercase tracking-wide text-slate-body sm:text-xs">
+                {metric.label}
+              </p>
             </div>
           ))}
         </motion.div>
